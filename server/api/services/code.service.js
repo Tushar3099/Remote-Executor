@@ -2,8 +2,8 @@ import fs from "fs";
 import { execFile, spawn, exec } from "child_process";
 import { stderr } from "process";
 import { resolve } from "path";
-const ROOT_DIR = "/d/Webdev/RemoteCodeExecutor/remote-code-executor";
-const SOURCE_DIR = `${ROOT_DIR}/executor`;
+const ROOT_DIR = "D:\\Webdev\\RemoteCodeExecutor\\remote-code-executor";
+const SOURCE_DIR = `${ROOT_DIR}\\executor`;
 const TARGET_DIR = `/app/codes`;
 const IMAGE_NAME = "executor:1.0";
 
@@ -23,7 +23,14 @@ class CodeService {
       );
 
       //executing the file
-      const OUTPUT = await this.execChild(runCode, runContainer, id);
+      const OUTPUT = await this.execChild(
+        runCode,
+        runContainer,
+        id,
+        file,
+        inputFile,
+        lang
+      );
 
       //deleting the container
 
@@ -57,13 +64,13 @@ class CodeService {
         throw { message: "Invalid language" };
       }
     }
-    fs.writeFile(`${SOURCE_DIR}/${fileName}`, code, (err) => {
+    fs.writeFile(`${SOURCE_DIR}\\${fileName}`, code, (err) => {
       if (err) throw { message: err };
     });
     // fs.writeFile(`${SOURCE_DIR}/${id}output.txt`, "", (err) => {
     //   if (err) throw { message: err };
     // });
-    fs.writeFile(`${SOURCE_DIR}/${id}input.txt`, input, (err) => {
+    fs.writeFile(`${SOURCE_DIR}\\${id}input.txt`, input, (err) => {
       if (err) throw { message: err };
     });
 
@@ -82,7 +89,7 @@ class CodeService {
         break;
       }
       case "c++": {
-        command = `cd ${TARGET_DIR} && g++ ${file} && a < ${input}`;
+        command = `cd ${TARGET_DIR} && g++ -o ${id} ${file} && ${id} < ${input}`;
         break;
       }
       case "python": {
@@ -103,7 +110,7 @@ class CodeService {
     return { runCode, runContainer };
   }
 
-  async execChild(runCode, runContainer, id) {
+  async execChild(runCode, runContainer, id, file, inputFile, lang) {
     return new Promise((resolve, reject) => {
       const execCont = exec(`${runContainer}`);
       const outputFile = `${id}output.txt`;
@@ -114,6 +121,7 @@ class CodeService {
       execCont.stdout.on("data", () => {
         exec(`${runCode}`, async (error, stdout, stderr) => {
           await this.endContainer(id);
+          await this.deleteFiles(file, inputFile, lang, id);
           if (stderr) {
             reject({ message: stderr });
           } else {
@@ -126,26 +134,26 @@ class CodeService {
     });
   }
 
-  // async deleteFiles(fileName, inputName, lang) {
-  //   fs.unlinkSync(`${SOURCE_DIR}/${fileName}`, (err) => {
-  //     if (err) throw err;
-  //   });
-  //   if (inputName) {
-  //     fs.unlinkSync(`${SOURCE_DIR}/${inputName}`, (err) => {
-  //       if (err) throw err;
-  //     });
-  //   }
-  //   if (lang == "c++") {
-  //     fs.unlinkSync(`${SOURCE_DIR}/a.exe`, (err) => {
-  //       if (err) throw err;
-  //     });
-  //   }
-  // }
+  async deleteFiles(fileName, inputName, lang, id) {
+    fs.unlinkSync(`${SOURCE_DIR}\\${fileName}`, (err) => {
+      if (err) throw err;
+    });
+    if (inputName) {
+      fs.unlinkSync(`${SOURCE_DIR}\\${inputName}`, (err) => {
+        if (err) throw err;
+      });
+    }
+    if (lang == "c++") {
+      fs.unlinkSync(`${SOURCE_DIR}\\${id}.exe`, (err) => {
+        if (err) throw err;
+      });
+    }
+  }
 
   async endContainer(id) {
     const containerName = `${id}container`;
     const exit = `docker stop ${containerName} && docker rm ${containerName}`;
-    cp.exec(`${exit}`, (error, stdout, stderr) => {
+    exec(`${exit}`, (error, stdout, stderr) => {
       if (error) {
         console.log(error);
       } else console.log("Container stoped and deleted");

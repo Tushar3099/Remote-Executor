@@ -1,5 +1,6 @@
 // import ExamplesService from '../../services/examples.service';
 import CodeService from "../../services/code.service";
+import { v4 as uuidv4 } from "uuid";
 
 export class Controller {
   async execute(req, res) {
@@ -7,7 +8,7 @@ export class Controller {
       const { code, input, id } = req.body;
       const { lang } = req.query;
       if (code && lang) {
-        const output = await CodeService.execute(code, input, lang, id);
+        const output = await CodeService.execute(code, input, lang, uuidv4());
         if (output) {
           res.send({
             status: "200",
