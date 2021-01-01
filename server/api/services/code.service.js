@@ -1,11 +1,9 @@
 import fs from "fs";
 import { execFile, spawn, exec } from "child_process";
-import { stderr } from "process";
-import { resolve } from "path";
-const ROOT_DIR = "D:\\Webdev\\RemoteCodeExecutor\\remote-code-executor";
-const SOURCE_DIR = `${ROOT_DIR}\\executor`;
+const ROOT_DIR = "/app";
+const SOURCE_DIR = `${ROOT_DIR}/executor`;
 const TARGET_DIR = `/app/codes`;
-const IMAGE_NAME = "executor:1.0";
+const IMAGE_NAME = "executor:1.1";
 
 class CodeService {
   async execute(code, input, lang, id) {
@@ -31,10 +29,6 @@ class CodeService {
         inputFile,
         lang
       );
-
-      //deleting the container
-
-      //deleting files
 
       if (OUTPUT) {
         // await this.deleteFiles(fileName, inputName, lang);
@@ -64,13 +58,13 @@ class CodeService {
         throw { message: "Invalid language" };
       }
     }
-    fs.writeFile(`${SOURCE_DIR}\\${fileName}`, code, (err) => {
+    fs.writeFile(`${SOURCE_DIR}/${fileName}`, code, (err) => {
       if (err) throw { message: err };
     });
     // fs.writeFile(`${SOURCE_DIR}/${id}output.txt`, "", (err) => {
     //   if (err) throw { message: err };
     // });
-    fs.writeFile(`${SOURCE_DIR}\\${id}input.txt`, input, (err) => {
+    fs.writeFile(`${SOURCE_DIR}/${id}input.txt`, input, (err) => {
       if (err) throw { message: err };
     });
 
@@ -89,7 +83,7 @@ class CodeService {
         break;
       }
       case "c++": {
-        command = `cd ${TARGET_DIR} && g++ -o ${id} ${file} && ${id} < ${input}`;
+        command = `cd ${TARGET_DIR} && g++ -o ${id} ${file} && ./${id} < ${input}`;
         break;
       }
       case "python": {
@@ -135,16 +129,16 @@ class CodeService {
   }
 
   async deleteFiles(fileName, inputName, lang, id) {
-    fs.unlinkSync(`${SOURCE_DIR}\\${fileName}`, (err) => {
+    fs.unlinkSync(`${SOURCE_DIR}/${fileName}`, (err) => {
       if (err) throw err;
     });
     if (inputName) {
-      fs.unlinkSync(`${SOURCE_DIR}\\${inputName}`, (err) => {
+      fs.unlinkSync(`${SOURCE_DIR}/${inputName}`, (err) => {
         if (err) throw err;
       });
     }
     if (lang == "c++") {
-      fs.unlinkSync(`${SOURCE_DIR}\\${id}.exe`, (err) => {
+      fs.unlinkSync(`${SOURCE_DIR}/${id}`, (err) => {
         if (err) throw err;
       });
     }
