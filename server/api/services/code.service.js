@@ -4,15 +4,14 @@ import { execFile, spawn, exec } from "child_process";
 const ROOT_DIR = `${process.cwd()}`;
 const SOURCE_DIR = path.join(ROOT_DIR, "executor");
 const TARGET_DIR = `/app/codes`;
-const IMAGE_NAME = "executor:1.1";
+const IMAGE_NAME = "executor:1.0";
 
 class CodeService {
   async execute(code, input, lang, id) {
     try {
-      console.log(SOURCE_DIR);
+      !input ? (input = "") : null;
       //validating code
-      const isValid= await this.validateCode(code, input, lang, id);
-      console.log(isValid)
+      await this.validateCode(code, input, lang, id);
 
       //writing the code,input  files
       const { file, inputFile } = await this.writeFile(code, lang, input, id);
@@ -43,7 +42,7 @@ class CodeService {
     }
   }
 
-  async validateCode(code,input,lang,id) {
+  async validateCode(code, input, lang, id) {
     switch (lang) {
       case "javascript": {
         let words = ["require(", "exports.", "module.exports"];
@@ -51,9 +50,10 @@ class CodeService {
         var valid = !words.some((el) => {
           return code.includes(el);
         });
-        return valid;
+        if (!valid) throw { message: "You have unacceptable libs imported" };
       }
     }
+    // throw { message: "You librabry is not accepted : " + lib };
   }
 
   async writeFile(code, lang, input, id) {
@@ -120,22 +120,20 @@ class CodeService {
   async execChild(runCode, runContainer, id, file, inputFile, lang) {
     return new Promise((resolve, reject) => {
       const execCont = exec(`${runContainer}`);
-      const outputFile = `${id}output.txt`;
       execCont.on("error", (err) => {
         throw { status: "404", message: err };
       });
-      resolve('ahhahaha')
-      // execCont.stdout.on("data", () => {
-      //   exec(`${runCode}`, async (error, stdout, stderr) => {
-      //     await this.endContainer(id);
-      //     await this.deleteFiles(file, inputFile, lang, id);
-      //     if (stderr) {
-      //       reject({ message: stderr });
-      //     } else {
-      //       resolve(stdout);
-      //     }
-      //   });
-      // });
+      execCont.stdout.on("data", () => {
+        exec(`${runCode}`, async (error, stdout, stderr) => {
+          await this.endContainer(id);
+          await this.deleteFiles(file, inputFile, lang, id);
+          if (stderr) {
+            reject({ message: stderr });
+          } else {
+            resolve(stdout);
+          }
+        });
+      });
     });
   }
 
