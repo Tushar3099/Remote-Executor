@@ -8,6 +8,10 @@ const IMAGE_NAME = "executor:1.1";
 class CodeService {
   async execute(code, input, lang, id) {
     try {
+      //validating code
+      const isValid= await this.validateCode(code, input, lang, id);
+      console.log(isValid)
+
       //writing the code,input  files
       const { file, inputFile } = await this.writeFile(code, lang, input, id);
 
@@ -36,6 +40,19 @@ class CodeService {
       }
     } catch (error) {
       throw error;
+    }
+  }
+
+  async validateCode(code,input,lang,id) {
+    switch (lang) {
+      case "javascript": {
+        let words = ["require(", "exports.", "module.exports"];
+        // prevent imports
+        var valid = !words.some((el) => {
+          return code.includes(el);
+        });
+        return valid;
+      }
     }
   }
 
