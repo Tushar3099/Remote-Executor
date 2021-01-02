@@ -1,6 +1,7 @@
 // import ExamplesService from '../../services/examples.service';
 import CodeService from "../../services/code.service";
 import { v4 as uuidv4 } from "uuid";
+import path from "path";
 
 export class Controller {
   async execute(req, res) {
@@ -30,7 +31,9 @@ export class Controller {
     try {
       res.send({
         status: "200",
-        message: "Current working directory is : " + process.cwd(),
+        message:
+          "Current working directory is : " +
+          path.join(process.cwd(), "executor"),
       });
     } catch (error) {
       res.send({

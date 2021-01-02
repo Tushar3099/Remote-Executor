@@ -1,13 +1,15 @@
 import fs from "fs";
+import path from "path";
 import { execFile, spawn, exec } from "child_process";
-const ROOT_DIR = "/app";
-const SOURCE_DIR = `${ROOT_DIR}/executor`;
+const ROOT_DIR = `${process.cwd()}`;
+const SOURCE_DIR = path.join(ROOT_DIR, "executor");
 const TARGET_DIR = `/app/codes`;
 const IMAGE_NAME = "executor:1.1";
 
 class CodeService {
   async execute(code, input, lang, id) {
     try {
+      console.log(SOURCE_DIR);
       //validating code
       const isValid= await this.validateCode(code, input, lang, id);
       console.log(isValid)
@@ -19,7 +21,6 @@ class CodeService {
       const { runCode, runContainer } = await this.writeCommand(
         lang,
         file,
-        // outputFile,
         inputFile,
         id
       );
@@ -35,7 +36,6 @@ class CodeService {
       );
 
       if (OUTPUT) {
-        // await this.deleteFiles(fileName, inputName, lang);
         return OUTPUT.toString();
       }
     } catch (error) {
@@ -75,19 +75,15 @@ class CodeService {
         throw { message: "Invalid language" };
       }
     }
-    fs.writeFile(`${SOURCE_DIR}/${fileName}`, code, (err) => {
+    fs.writeFile(path.join(SOURCE_DIR, fileName), code, (err) => {
       if (err) throw { message: err };
     });
-    // fs.writeFile(`${SOURCE_DIR}/${id}output.txt`, "", (err) => {
-    //   if (err) throw { message: err };
-    // });
-    fs.writeFile(`${SOURCE_DIR}/${id}input.txt`, input, (err) => {
+    fs.writeFile(path.join(SOURCE_DIR, `${id}input.txt`), input, (err) => {
       if (err) throw { message: err };
     });
 
     return {
       file: fileName,
-      // output: `${id}output.txt`,
       inputFile: `${id}input.txt`,
     };
   }
@@ -128,34 +124,32 @@ class CodeService {
       execCont.on("error", (err) => {
         throw { status: "404", message: err };
       });
-
-      execCont.stdout.on("data", () => {
-        exec(`${runCode}`, async (error, stdout, stderr) => {
-          await this.endContainer(id);
-          await this.deleteFiles(file, inputFile, lang, id);
-          if (stderr) {
-            reject({ message: stderr });
-          } else {
-            // const outputData = fs.createReadStream(`${SOURCE_DIR}/${outputFile}`);
-            // resolve(outputData.toString());
-            resolve(stdout);
-          }
-        });
-      });
+      resolve('ahhahaha')
+      // execCont.stdout.on("data", () => {
+      //   exec(`${runCode}`, async (error, stdout, stderr) => {
+      //     await this.endContainer(id);
+      //     await this.deleteFiles(file, inputFile, lang, id);
+      //     if (stderr) {
+      //       reject({ message: stderr });
+      //     } else {
+      //       resolve(stdout);
+      //     }
+      //   });
+      // });
     });
   }
 
   async deleteFiles(fileName, inputName, lang, id) {
-    fs.unlinkSync(`${SOURCE_DIR}/${fileName}`, (err) => {
+    fs.unlinkSync(path.join(SOURCE_DIR, fileName), (err) => {
       if (err) throw err;
     });
     if (inputName) {
-      fs.unlinkSync(`${SOURCE_DIR}/${inputName}`, (err) => {
+      fs.unlinkSync(path.join(SOURCE_DIR, inputName), (err) => {
         if (err) throw err;
       });
     }
     if (lang == "c++") {
-      fs.unlinkSync(`${SOURCE_DIR}/${id}`, (err) => {
+      fs.unlinkSync(path.join(SOURCE_DIR, id), (err) => {
         if (err) throw err;
       });
     }
