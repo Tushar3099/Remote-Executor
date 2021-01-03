@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { execFile, spawn, exec } from "child_process";
+import ValidationService from "./validation.service";
 const ROOT_DIR = `${process.cwd()}`;
 const SOURCE_DIR = path.join(ROOT_DIR, "executor");
 const TARGET_DIR = `/app/codes`;
@@ -10,8 +11,19 @@ class CodeService {
   async execute(code, input, lang, id) {
     try {
       !input ? (input = "") : null;
+
       //validating code
-      await this.validateCode(code, input, lang, id);
+      const { isValid, message } = await ValidationService.execute(
+        code,
+        input,
+        lang,
+        id
+      );
+      if (!isValid) {
+        throw {
+          message,
+        };
+      }
 
       //writing the code,input  files
       const { file, inputFile } = await this.writeFile(code, lang, input, id);
@@ -40,20 +52,6 @@ class CodeService {
     } catch (error) {
       throw error;
     }
-  }
-
-  async validateCode(code, input, lang, id) {
-    switch (lang) {
-      case "javascript": {
-        let words = ["require(", "exports.", "module.exports"];
-        // prevent imports
-        var valid = !words.some((el) => {
-          return code.includes(el);
-        });
-        if (!valid) throw { message: "You have unacceptable libs imported" };
-      }
-    }
-    // throw { message: "You librabry is not accepted : " + lib };
   }
 
   async writeFile(code, lang, input, id) {
