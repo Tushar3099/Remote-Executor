@@ -1,15 +1,15 @@
-import fs from "fs";
-import path from "path";
-import { execFile, spawn, exec } from "child_process";
+import fs from 'fs';
+import path from 'path';
+import { execFile, spawn, exec } from 'child_process';
 const ROOT_DIR = `${process.cwd()}`;
-const SOURCE_DIR = path.join(ROOT_DIR, "executor");
+const SOURCE_DIR = path.join(ROOT_DIR, 'executor');
 const TARGET_DIR = `/app/codes`;
-const IMAGE_NAME = "executor:1.0";
+const IMAGE_NAME = 'executor:1.0';
 
 class CodeService {
   async execute(code, input, lang, id) {
     try {
-      !input ? (input = "") : null;
+      !input ? (input = '') : null;
       //validating code
       await this.validateCode(code, input, lang, id);
 
@@ -44,13 +44,13 @@ class CodeService {
 
   async validateCode(code, input, lang, id) {
     switch (lang) {
-      case "javascript": {
-        let words = ["require(", "exports.", "module.exports"];
+      case 'javascript': {
+        let words = ['require(', 'exports.', 'module.exports'];
         // prevent imports
-        var valid = !words.some((el) => {
+        var valid = !words.some(el => {
           return code.includes(el);
         });
-        if (!valid) throw { message: "You have unacceptable libs imported" };
+        if (!valid) throw { message: 'You have unacceptable libs imported' };
       }
     }
     // throw { message: "You librabry is not accepted : " + lib };
@@ -59,52 +59,60 @@ class CodeService {
   async writeFile(code, lang, input, id) {
     let fileName = `${id}code`;
     switch (lang) {
-      case "javascript": {
-        fileName += ".js";
+      case 'javascript': {
+        fileName += '.js';
         break;
       }
-      case "c++": {
-        fileName += ".cpp";
+      case 'c++': {
+        fileName += '.cpp';
         break;
       }
-      case "python": {
-        fileName += ".py";
+      case 'python': {
+        fileName += '.py';
+        break;
+      }
+      case 'java': {
+        fileName += '.java';
         break;
       }
       default: {
-        throw { message: "Invalid language" };
+        throw { message: 'Invalid language' };
       }
     }
-    fs.writeFile(path.join(SOURCE_DIR, fileName), code, (err) => {
+    fs.writeFile(path.join(SOURCE_DIR, fileName), code, err => {
       if (err) throw { message: err };
     });
-    fs.writeFile(path.join(SOURCE_DIR, `${id}input.txt`), input, (err) => {
+    fs.writeFile(path.join(SOURCE_DIR, `${id}input.txt`), input, err => {
       if (err) throw { message: err };
     });
 
     return {
       file: fileName,
-      inputFile: `${id}input.txt`,
+      inputFile: `${id}input.txt`
     };
   }
 
   async writeCommand(lang, file, input, id) {
-    let command = "";
+    let command = '';
     switch (lang) {
-      case "javascript": {
+      case 'javascript': {
         command = `cd ${TARGET_DIR} && node ${file} < ${input}`;
         break;
       }
-      case "c++": {
+      case 'c++': {
         command = `cd ${TARGET_DIR} && g++ -o ${id} ${file} && ./${id} < ${input}`;
         break;
       }
-      case "python": {
+      case 'python': {
         command = `cd ${TARGET_DIR} && python ${file} < ${input}`;
         break;
       }
+      case 'java': {
+        command = `cd ${TARGET_DIR} && javac ${file} && java Input < ${input}`;
+        break;
+      }
       default: {
-        throw { message: "Invalid language" };
+        throw { message: 'Invalid language' };
       }
     }
 
@@ -120,10 +128,10 @@ class CodeService {
   async execChild(runCode, runContainer, id, file, inputFile, lang) {
     return new Promise((resolve, reject) => {
       const execCont = exec(`${runContainer}`);
-      execCont.on("error", (err) => {
-        throw { status: "404", message: err };
+      execCont.on('error', err => {
+        throw { status: '404', message: err };
       });
-      execCont.stdout.on("data", () => {
+      execCont.stdout.on('data', () => {
         exec(`${runCode}`, async (error, stdout, stderr) => {
           await this.endContainer(id);
           await this.deleteFiles(file, inputFile, lang, id);
@@ -138,16 +146,16 @@ class CodeService {
   }
 
   async deleteFiles(fileName, inputName, lang, id) {
-    fs.unlinkSync(path.join(SOURCE_DIR, fileName), (err) => {
+    fs.unlinkSync(path.join(SOURCE_DIR, fileName), err => {
       if (err) throw err;
     });
     if (inputName) {
-      fs.unlinkSync(path.join(SOURCE_DIR, inputName), (err) => {
+      fs.unlinkSync(path.join(SOURCE_DIR, inputName), err => {
         if (err) throw err;
       });
     }
-    if (lang == "c++") {
-      fs.unlinkSync(path.join(SOURCE_DIR, id), (err) => {
+    if (lang == 'c++') {
+      fs.unlinkSync(path.join(SOURCE_DIR, id), err => {
         if (err) throw err;
       });
     }
@@ -159,7 +167,7 @@ class CodeService {
     exec(`${exit}`, (error, stdout, stderr) => {
       if (error) {
         console.log(error);
-      } else console.log("Container stoped and deleted");
+      } else console.log('Container stoped and deleted');
     });
   }
 }
