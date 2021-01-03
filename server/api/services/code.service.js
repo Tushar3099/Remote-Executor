@@ -75,6 +75,10 @@ class CodeService {
         fileName += '.java';
         break;
       }
+      case 'c': {
+        fileName += '.c';
+        break;
+      }
       default: {
         throw { message: 'Invalid language' };
       }
@@ -109,6 +113,10 @@ class CodeService {
       }
       case 'java': {
         command = `cd ${TARGET_DIR} && javac ${file} && java Input < ${input}`;
+        break;
+      }
+      case 'c': {
+        command = `cd ${TARGET_DIR} && gcc -o ${id} ${file} && ./${id} < ${input}`;
         break;
       }
       default: {
@@ -154,8 +162,14 @@ class CodeService {
         if (err) throw err;
       });
     }
-    if (lang == 'c++') {
+    if (lang == 'c++' || lang == 'c') {
       fs.unlinkSync(path.join(SOURCE_DIR, id), err => {
+        if (err) throw err;
+      });
+    }
+
+    if (lang == 'java') {
+      fs.unlinkSync(path.join(SOURCE_DIR, 'Input.class'), err => {
         if (err) throw err;
       });
     }
