@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import util from "util";
 import { execFile, spawn, exec } from "child_process";
 const ROOT_DIR = `${process.cwd()}`;
 const SOURCE_DIR = path.join(ROOT_DIR, "executor");
@@ -11,7 +12,7 @@ class CodeService {
     try {
       !input ? (input = "") : null;
       //validating code
-      await this.validateCode(code, input, lang, id);
+      // await this.validateCode(code, input, lang, id);
 
       //writing the code,input  files
       const { file, inputFile } = await this.writeFile(code, lang, input, id);
@@ -75,17 +76,18 @@ class CodeService {
         throw { message: "Invalid language" };
       }
     }
-    fs.writeFile(path.join(SOURCE_DIR, fileName), code, (err) => {
-      if (err) throw { message: err };
-    });
-    fs.writeFile(path.join(SOURCE_DIR, `${id}input.txt`), input, (err) => {
-      if (err) throw { message: err };
-    });
+    const write = util.promisify(fs.writeFile);
 
-    return {
-      file: fileName,
-      inputFile: `${id}input.txt`,
-    };
+    try {
+      await write(path.join(SOURCE_DIR, fileName), code);
+      await write(path.join(SOURCE_DIR, `${id}input.txt`), input);
+      return {
+        file: fileName,
+        inputFile: `${id}input.txt`,
+      };
+    } catch (error) {
+      throw { message: error };
+    }
   }
 
   async writeCommand(lang, file, input, id) {
@@ -139,16 +141,16 @@ class CodeService {
 
   async deleteFiles(fileName, inputName, lang, id) {
     fs.unlinkSync(path.join(SOURCE_DIR, fileName), (err) => {
-      if (err) throw err;
+      if (err) throw { message: err };
     });
     if (inputName) {
       fs.unlinkSync(path.join(SOURCE_DIR, inputName), (err) => {
-        if (err) throw err;
+        if (err) throw { message: err };
       });
     }
     if (lang == "c++") {
       fs.unlinkSync(path.join(SOURCE_DIR, id), (err) => {
-        if (err) throw err;
+        if (err) throw { message: err };
       });
     }
   }
