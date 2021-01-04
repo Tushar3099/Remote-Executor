@@ -6,6 +6,7 @@ const ROOT_DIR = `${process.cwd()}`;
 const SOURCE_DIR = path.join(ROOT_DIR, "executor");
 const TARGET_DIR = `/app/codes`;
 const IMAGE_NAME = "executor:1.0";
+const VOL_NAME = `my_vol`;
 
 class CodeService {
   async execute(code, input, lang, id) {
@@ -114,7 +115,7 @@ class CodeService {
 
     const runCode = `docker exec ${containerName} sh -c "${command}"`;
 
-    const runContainer = `docker run -it -d --name ${containerName} -v "${SOURCE_DIR}:${TARGET_DIR}" ${IMAGE_NAME}`;
+    const runContainer = `docker run -it -d --name ${containerName} --mount source=${VOL_NAME},target=${TARGET_DIR} ${IMAGE_NAME}`;
 
     return { runCode, runContainer };
   }

@@ -12,4 +12,4 @@ RUN npm install
 COPY . .
 EXPOSE 3000
 CMD ["npm","run","dev"]
-# docker run -it -d --name my_server -p 3000:3000 -v /var/run/docker.sock:/var/run/docker.sock server:1.1
+# docker run -it -d --name my_server -p 3000:3000 -v /var/run/docker.sock:/var/run/docker.sock --mount source=my_vol,target=/executor server:2.0
