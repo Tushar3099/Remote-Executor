@@ -45,6 +45,11 @@ class ValidationService {
           isValid: true
         };
       }
+      case 'c': {
+        return {
+          isValid: true
+        };
+      }
       default: {
         return {
           isValid: false,
