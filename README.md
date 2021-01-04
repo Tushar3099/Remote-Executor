@@ -24,10 +24,14 @@ RCE is a Remote Code Executor, as the name suggests Is a Docker-based sandbox en
 # build docker image
 docker-compose build
 
+# create volume
+docker volume create my_vol
+
 # run server in development mode
 docker-compose up server
 ```
 
+`
 This will build the required docker image and run the server in a docker container which will be listening at http://localhost:3000.
 
 ### For development and adding features
@@ -44,7 +48,8 @@ Runs the application is development mode. Should not be used in production
 npm run dev
 ```
 
-This is for development of the application.
+This is for
+development of the application.
 
 #### Run in _production_ mode:
 

@@ -2,18 +2,32 @@ import fs from "fs";
 import path from "path";
 import util from "util";
 import { execFile, spawn, exec } from "child_process";
+import ValidationService from "./validation.service";
 const ROOT_DIR = `${process.cwd()}`;
 const SOURCE_DIR = path.join(ROOT_DIR, "executor");
 const TARGET_DIR = `/app/codes`;
 const IMAGE_NAME = "executor:1.0";
 const VOL_NAME = `my_vol`;
+// const VOL_NAME = SOURCE_DIR;
 
 class CodeService {
   async execute(code, input, lang, id) {
     try {
       !input ? (input = "") : null;
+
       //validating code
       // await this.validateCode(code, input, lang, id);
+      const { isValid, message } = await ValidationService.execute(
+        code,
+        input,
+        lang,
+        id
+      );
+      if (!isValid) {
+        throw {
+          message,
+        };
+      }
 
       //writing the code,input  files
       const { file, inputFile } = await this.writeFile(code, lang, input, id);
@@ -42,20 +56,6 @@ class CodeService {
     } catch (error) {
       throw error;
     }
-  }
-
-  async validateCode(code, input, lang, id) {
-    switch (lang) {
-      case "javascript": {
-        let words = ["require(", "exports.", "module.exports"];
-        // prevent imports
-        var valid = !words.some((el) => {
-          return code.includes(el);
-        });
-        if (!valid) throw { message: "You have unacceptable libs imported" };
-      }
-    }
-    // throw { message: "You librabry is not accepted : " + lib };
   }
 
   async writeFile(code, lang, input, id) {
@@ -115,7 +115,7 @@ class CodeService {
 
     const runCode = `docker exec ${containerName} sh -c "${command}"`;
 
-    const runContainer = `docker run -it -d --name ${containerName} --mount source=${VOL_NAME},target=${TARGET_DIR} ${IMAGE_NAME}`;
+    const runContainer = `docker run -it -d --name ${containerName} -v ${VOL_NAME}:${TARGET_DIR} ${IMAGE_NAME}`;
 
     return { runCode, runContainer };
   }
