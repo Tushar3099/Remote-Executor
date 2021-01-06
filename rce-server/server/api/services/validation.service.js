@@ -17,7 +17,7 @@ class ValidationService {
         let reg1 = RegExp(
           /\bimport\W+(?:\w+\W+){0,}(?:os|subprocess|importlib)\b/g
         );
-        words = ["open("];
+        let words = ["open("];
 
         if (code.match(reg1)) {
           return {
@@ -25,11 +25,7 @@ class ValidationService {
             message: "You have unacceptable libs imported",
           };
         } else if (
-<<<<<<< HEAD
-          words.every((el) => code.toLowerCase().includes(el.toLowerCase()))
-=======
-          !words.every(el => code.toLowerCase().includes(el.toLowerCase()))
->>>>>>> 8ba1999345de29ac621848df532983f857213ca7
+          !words.every((el) => code.toLowerCase().includes(el.toLowerCase()))
         ) {
           return {
             isValid: false,
