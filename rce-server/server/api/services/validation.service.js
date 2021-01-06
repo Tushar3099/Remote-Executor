@@ -25,7 +25,7 @@ class ValidationService {
             message: "You have unacceptable libs imported",
           };
         } else if (
-          !words.every((el) => code.toLowerCase().includes(el.toLowerCase()))
+          words.every((el) => code.toLowerCase().includes(el.toLowerCase()))
         ) {
           return {
             isValid: false,
