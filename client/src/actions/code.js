@@ -17,7 +17,7 @@ export const executeCode = async (code, lang, input) => {
       config
     );
 
-    if (res.data.status == '500') {
+    if (res.data.status === '500') {
       return {
         type: SET_ERROR,
         payload: res.data.message
@@ -30,6 +30,10 @@ export const executeCode = async (code, lang, input) => {
     }
   } catch (error) {
     console.log(error);
+    return {
+      type: SET_ERROR,
+      payload: 'Something wrong'
+    };
   }
 };
 
