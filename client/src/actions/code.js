@@ -32,7 +32,7 @@ export const executeCode = async (code, lang, input) => {
     console.log(error);
     return {
       type: SET_ERROR,
-      payload: 'Something wrong'
+      payload: 'Something went wrong'
     };
   }
 };
