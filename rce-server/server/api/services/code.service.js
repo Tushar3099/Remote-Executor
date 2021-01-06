@@ -8,12 +8,11 @@ const SOURCE_DIR = path.join(ROOT_DIR, "executor");
 const TARGET_DIR = `/app/codes`;
 const IMAGE_NAME = "executor:1.0";
 const VOL_NAME = `my_vol`;
-// const VOL_NAME = SOURCE_DIR;
+//const VOL_NAME = SOURCE_DIR;
 
 class CodeService {
   async execute(code, input, lang, id) {
-    // console.log('code', code);
-    console.log(SOURCE_DIR);
+    //console.log('code', code);
     try {
       !input ? (input = "") : null;
 
@@ -168,10 +167,11 @@ class CodeService {
         if (err) throw { message: err };
       });
     }
-    if (lang == "cpp") {
-      fs.unlinkSync(path.join(SOURCE_DIR, id), (err) => {
-        if (err) throw err;
-      });
+    if (lang == "cpp" || lang == "c") {
+      if (fs.existsSync(path.join(SOURCE_DIR, id)))
+        fs.unlinkSync(path.join(SOURCE_DIR, id), (err) => {
+          if (err) throw err;
+        });
     }
     if (lang == "java") {
       fs.unlinkSync(path.join(SOURCE_DIR, "Input.class"), (err) => {
