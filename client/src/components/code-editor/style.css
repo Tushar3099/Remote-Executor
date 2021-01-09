@@ -1,0 +1,25 @@
+.sel-lang > select {
+  display: block;
+  font-size: 16px;
+  font-family: sans-serif;
+  font-weight: 700;
+  color: #444;
+  line-height: 1.3;
+  padding: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  outline: none;
+  border: none;
+  background-color: white;
+}
+
+.sel-lang > select > option {
+  font-size: 16px;
+  font-family: sans-serif;
+  font-weight: 700;
+  color: #444;
+  line-height: 1.3;
+  padding: 10px;
+  display: block;
+}
