@@ -8,6 +8,7 @@ import Split from "react-split";
 import styled from "styled-components";
 import styles from "./style.module.css";
 import "./style.css";
+import { Play } from "react-feather";
 
 const Row = styled.div`
   display: flex;
@@ -75,7 +76,8 @@ const CodeEditor = ({ theme }) => {
                 onClick={SubmitCode}
                 disabled={!isEditorReady}
               >
-                {loading ? "Loading.." : "Submit"}
+                {loading ? "Loading.." : "Run Code"}
+                <Play style={{ paddingLeft: 10, fontSize: "1em" }} />
               </div>
             </div>
             <Editor
