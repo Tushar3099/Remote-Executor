@@ -1,8 +1,9 @@
-import React from 'react';
-import styles from './styles/home.module.css';
-import Header from './Header';
-import Terminal from './Terminal';
-import { motion } from 'framer-motion';
+import React from "react";
+import styles from "./styles/home.module.css";
+import Header from "./Header";
+import Terminal from "./Terminal";
+import { motion } from "framer-motion";
+import Typist from "react-typist";
 
 const Home = () => {
   return (
@@ -11,14 +12,17 @@ const Home = () => {
       <div className={styles.container}>
         <div className={styles.left}>
           <motion.h1
-            initial={{ x: '-100vw' }}
+            initial={{ x: "-100vw" }}
             animate={{ x: 0 }}
             transition={{ duration: 1 }}
           >
             Code
             <span>X</span>
           </motion.h1>
-          <p>Fast, Lighter and Best IDE for you Noobs...</p>
+          <Typist startDelay={2} avgTypingDelay={120}>
+            Fast, Lighter and Best IDE for you Noobs...
+          </Typist>
+
           {/* <div className={styles.options_tab}>
             <div className={styles.options_tab_overlay}></div>
             <ul>

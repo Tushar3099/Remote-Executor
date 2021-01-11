@@ -3,6 +3,8 @@
   flex-direction: column;
   width: 80%;
   height: 80%;
+  max-width: 600px;
+  margin-left: 10%;
   background-color: black;
   box-sizing: border-box;
   border-radius: 10px;
@@ -27,7 +29,7 @@
 .terminal_body {
   box-sizing: border-box;
   flex: 1;
-  padding: 10px;
+  padding: 25px 20px 20px 20px;
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
@@ -39,12 +41,14 @@
   flex-direction: column;
   flex: 1;
   justify-content: space-around;
-  padding: 20px;
+  padding: 25px;
+  padding-top: 0;
   box-sizing: border-box;
 }
 
 .option_tabs > .button1 {
-  padding: 20px;
+  padding: 10px;
+  margin: 10px;
   font-size: 24px;
   width: auto;
   align-self: center;
@@ -61,7 +65,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border: 4px solid gainsboro;
+  border: 3px solid gainsboro;
   box-sizing: border-box;
 }
 
@@ -125,7 +129,8 @@
 }
 
 .option_tabs > .button2 {
-  padding: 20px;
+  padding: 10px;
+  margin: 10px;
   font-size: 24px;
   width: auto;
   align-self: center;
@@ -140,7 +145,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border: 4px solid gainsboro;
+  border: 3px solid gainsboro;
   box-sizing: border-box;
 }
 
@@ -204,7 +209,8 @@
 }
 
 .option_tabs > .button3 {
-  padding: 20px;
+  padding: 10px;
+  margin: 10px;
   font-size: 24px;
   width: auto;
   align-self: center;
@@ -220,7 +226,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border: 4px solid gainsboro;
+  border: 3px solid gainsboro;
   box-sizing: border-box;
 }
 
