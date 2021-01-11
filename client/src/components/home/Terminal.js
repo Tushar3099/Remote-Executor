@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { node } from 'prop-types';
 import { Settings, User, UserCheck, Code } from 'react-feather';
 import { motion } from 'framer-motion';
+import { useHistory } from 'react-router-dom';
 
 const color = [
   '#ee7752',
@@ -36,6 +37,7 @@ const Body = styled.div`
 `;
 
 const Terminal = () => {
+  const history = useHistory();
   return (
     <div className={styles.terminal_container}>
       <div className={styles.terminal_header}>
@@ -58,7 +60,12 @@ const Terminal = () => {
         <Body color={color[4]} width={width[9]} /> */}
       </div>
       <div className={styles.option_tabs}>
-        <button className={styles.button1}>
+        <button
+          className={styles.button1}
+          onClick={() => {
+            history.push('/ide');
+          }}
+        >
           <span></span>
           <span></span>
           <span></span>

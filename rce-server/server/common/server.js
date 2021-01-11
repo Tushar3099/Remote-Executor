@@ -48,6 +48,11 @@ export default class ExpressServer {
       .then(() => {
         const server = http.createServer(app).listen(port, welcome(port));
         io = socketio(server);
+        // app.use(function (req, res, next) {
+        //   req.io = io;
+        //   next();
+        // });
+
         // console.log(io);
       })
       .catch((e) => {
@@ -55,6 +60,7 @@ export default class ExpressServer {
         // eslint-disable-next-line no-process-exit
         process.exit(1);
       });
+    // app.set(io)
     return app;
   }
   socketListen() {
