@@ -1,0 +1,44 @@
+import React from 'react';
+import styles from './styles/home.module.css';
+import Header from './Header';
+import Terminal from './Terminal';
+import { motion } from 'framer-motion';
+
+const Home = () => {
+  return (
+    <>
+      <Header />
+      <div className={styles.container}>
+        <div className={styles.left}>
+          <motion.h1
+            initial={{ x: '-100vw' }}
+            animate={{ x: 0 }}
+            transition={{ duration: 1 }}
+          >
+            Code
+            <span>X</span>
+          </motion.h1>
+          <p>Fast, Lighter and Best IDE for you Noobs...</p>
+          {/* <div className={styles.options_tab}>
+            <div className={styles.options_tab_overlay}></div>
+            <ul>
+              <li>IDE</li>
+              <li>Host an Interview</li>
+              <li>Enter an Interview</li>
+            </ul>
+          </div> */}
+        </div>
+        <div className={styles.right}>
+          {/* <img
+            src={
+              'https://next-cdn.codementor.io/images/pair-programming/pair-programming-laptop.png'
+            }
+          /> */}
+          <Terminal />
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default Home;

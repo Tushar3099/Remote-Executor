@@ -1,8 +1,8 @@
-.input-field::-webkit-scrollbar {
+.input_field::-webkit-scrollbar {
   display: none;
 }
 
-.textarea-input {
+.textarea_input {
   display: flex;
   outline: none;
   border-radius: 7px;
