@@ -1,7 +1,6 @@
 import React from 'react';
 import styles from './styles/terminal.module.css';
 import styled from 'styled-components';
-import { node } from 'prop-types';
 import { Settings, User, UserCheck, Code } from 'react-feather';
 import { motion } from 'framer-motion';
 import { useHistory } from 'react-router-dom';
@@ -38,8 +37,47 @@ const Body = styled.div`
 
 const Terminal = () => {
   const history = useHistory();
+  const body = {
+    visible: { opacity: 1, x: 0 },
+    hidden: { opacity: 0, x: 100 }
+  };
+
+  const item = {
+    visible: i => ({
+      opacity: 1,
+      transition: {
+        delay: i * 0.3,
+        ease: 'easeOut'
+      }
+    }),
+    hidden: {
+      opacity: 0
+    }
+  };
+
+  const button = {
+    visible: i => ({
+      scale: 1,
+      transition: {
+        when: 'beforeChildren',
+        staggerChildren: 0.3,
+        delay: i * 0.5
+      }
+    }),
+    hidden: {
+      scale: 0,
+      transition: {
+        when: 'afterChildren'
+      }
+    }
+  };
   return (
-    <div className={styles.terminal_container}>
+    <motion.div
+      className={styles.terminal_container}
+      variants={body}
+      initial='hidden'
+      animate='visible'
+    >
       <div className={styles.terminal_header}>
         <Dot color={'red'} />
         <Dot color={'yellow'} />
@@ -50,21 +88,40 @@ const Terminal = () => {
           let random_color = Math.floor(Math.random() * 10) + 1;
           let random_width = Math.floor(Math.random() * 10) + 1;
           return (
-            <Body
-              color={color[random_color - 1]}
-              width={width[random_width - 1]}
-            />
+            <motion.div
+              style={{
+                width: `${width[random_width]}%`,
+                height: 15,
+                marginLeft: 10,
+                backgroundColor: `${color[random_color]}`,
+                borderRadius: 15
+              }}
+              variants={item}
+              animate='visible'
+              initial='hidden'
+              custom={i}
+            >
+              {/* <Body
+                color={color[random_color - 1]}
+                width={width[random_width - 1]}
+              /> */}
+            </motion.div>
           );
         })}
         {/* <Body color={color[0]} width={width[0]} />
         <Body color={color[4]} width={width[9]} /> */}
       </div>
       <div className={styles.option_tabs}>
-        <button
+        <motion.button
           className={styles.button1}
           onClick={() => {
             history.push('/ide');
           }}
+          whileTap={{ scale: 0.95 }}
+          variants={button}
+          animate='visible'
+          initial='hidden'
+          custom={3.5}
         >
           <span></span>
           <span></span>
@@ -83,23 +140,37 @@ const Terminal = () => {
           >
             <Settings style={{ marginLeft: 10 }} size={30} />
           </motion.div>
-        </button>
-        <button className={styles.button2}>
+        </motion.button>
+        <motion.button
+          className={styles.button2}
+          whileTap={{ scale: 0.95 }}
+          variants={button}
+          animate='visible'
+          initial='hidden'
+          custom={4}
+        >
           <span></span>
           <span></span>
           <span></span>
           <span></span>HOST AN INTERVIEW
           <UserCheck style={{ marginLeft: 10 }} size={30} />
-        </button>
-        <button className={styles.button3}>
+        </motion.button>
+        <motion.button
+          className={styles.button3}
+          whileTap={{ scale: 0.95 }}
+          variants={button}
+          animate='visible'
+          initial='hidden'
+          custom={4.5}
+        >
           <span></span>
           <span></span>
           <span></span>
           <span></span>ENTER INTERVIEW
           <Code style={{ marginLeft: 10 }} size={30} />
-        </button>
+        </motion.button>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
