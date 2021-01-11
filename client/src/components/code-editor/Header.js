@@ -1,9 +1,9 @@
-import React from "react";
-import ToggleTheme from "./ToggleTheme";
-import styles from "./headerStyles.module.css";
-import { Code } from "react-feather";
+import React from 'react';
+import ToggleTheme from './ToggleTheme';
+import styles from './styles/headerStyles.module.css';
+import { Code } from 'react-feather';
 
-const Header = (props) => {
+const Header = props => {
   return (
     <div className={styles.header}>
       <p className={styles.brand}>
