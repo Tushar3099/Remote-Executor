@@ -12,5 +12,5 @@ body {
   height: 100vh;
   background-color: gainsboro;
   font-family: "Montserrat", sans-serif;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
