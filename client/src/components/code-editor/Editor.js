@@ -89,43 +89,65 @@ const CodeEditor = ({ theme }) => {
   return (
     <>
       <div className={styles.row}>
-        <div className={styles.left}>
-          <div className={styles.runCode}>
-            <Submit language={language} changeLanguage={changeLanguage} />
-            <div
-              className={styles.submitButton}
-              onClick={SubmitCode}
-              disabled={!isEditorReady}
-            >
-              {loading ? "Loading.." : "Run Code"}
-              <Play style={{ paddingLeft: 10, fontSize: "1em" }} />
+        <Split
+          direction="horizontal"
+          sizes={[50, 50]}
+          minSize={0}
+          snapOffset={200}
+          className={styles.splitHor}
+        >
+          <div className={styles.left}>
+            <div className={styles.runCode}>
+              <Submit language={language} changeLanguage={changeLanguage} />
+              <div
+                className={styles.submitButton}
+                onClick={SubmitCode}
+                disabled={!isEditorReady}
+              >
+                {loading ? "Loading.." : "Run Code"}
+                <Play style={{ paddingLeft: 10, fontSize: "1em" }} />
+              </div>
+            </div>
+            {/* <Editor
+              wrapperClassName="editor"
+              language={language}
+              theme={theme === "dark" ? "vs-dark" : "light"}
+              editorDidMount={handleEditorDidMount}
+            /> */}
+            <ControlledEditor
+              wrapperClassName="editor"
+              language={language}
+              theme={theme === "dark" ? "vs-dark" : "light"}
+              editorDidMount={handleEditorDidMount}
+              value={code}
+              onChange={onChangeCode}
+            />
+          </div>
+          <div className={styles.right}>
+            <div className={styles.column}>
+              <Split
+                direction="vertical"
+                sizes={[50, 50]}
+                minSize={0}
+                snapOffset={200}
+                className={styles.splitVer}
+              >
+                <div className={styles.output}>
+                  <div className={styles.outputHead}>Output</div>
+                  <OutputWindow error={error === "" ? false : true}>
+                    {output ? console.log(output) : null}
+                    <pre style={{ width: "100%" }}>
+                      {output === "" ? error : output}
+                    </pre>
+                  </OutputWindow>
+                </div>
+                <div className={styles.input}>
+                  <Input input={input} setInput={setInput} theme={theme} />
+                </div>
+              </Split>
             </div>
           </div>
-          <ControlledEditor
-            wrapperClassName="editor"
-            language={language}
-            theme={theme === "dark" ? "vs-dark" : "light"}
-            editorDidMount={handleEditorDidMount}
-            value={code}
-            onChange={onChangeCode}
-          />
-        </div>
-        <div className={styles.right}>
-          <div className={styles.column}>
-            <div className={styles.output}>
-              <div className={styles.outputHead}>Output</div>
-              <OutputWindow error={error === "" ? false : true}>
-                {output ? console.log(output) : null}
-                <pre style={{ width: "100%" }}>
-                  {output === "" ? error : output}
-                </pre>
-              </OutputWindow>
-            </div>
-            <div className={styles.input}>
-              <Input input={input} setInput={setInput} theme={theme} />
-            </div>
-          </div>
-        </div>
+        </Split>
       </div>
     </>
   );

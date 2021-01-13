@@ -1,9 +1,9 @@
-import React from 'react';
-import styles from './styles/home.module.css';
-import Header from './Header';
-import Terminal from './Terminal';
-import { motion } from 'framer-motion';
-import Typist from 'react-typist';
+import React from "react";
+import styles from "./styles/home.module.css";
+import Header from "./Header";
+import Terminal from "./Terminal";
+import { motion } from "framer-motion";
+import Typist from "react-typist";
 
 const Home = () => {
   return (
@@ -12,7 +12,7 @@ const Home = () => {
       <div className={styles.container}>
         <div className={styles.left}>
           <motion.h1
-            initial={{ x: '-100vw' }}
+            initial={{ x: "-100vw" }}
             animate={{ x: 0 }}
             transition={{ duration: 1 }}
           >
