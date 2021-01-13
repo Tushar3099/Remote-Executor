@@ -24,7 +24,7 @@
   animation: gradient 6s ease infinite;
 }
 
-.left > p {
+.left > div {
   font-size: 20px;
 }
 

@@ -26,17 +26,24 @@ app.use(cors());
 
 routes(app);
 
-let interval;
-
 io.on("connection", (socket) => {
-  socket.on("ping", function (data) {
-    console.log("socket: server recieves ping (2)");
+  socket.on("getLanguage", function (lang) {
+    console.log("server " + lang);
+    io.emit("setLanguage", lang);
+  });
 
-    // (3): Return a pong event to the browser
-    // echoing back the data from the ping event
-    socket.emit("pong", data);
+  socket.on("getInput", function (input) {
+    console.log("server " + input);
+    io.emit("setInput", input);
+  });
+  socket.on("getOutput", function (output) {
+    console.log("server " + output);
+    io.emit("setOutput", output);
+  });
 
-    console.log("socket: server sends pong (3)");
+  socket.on("getCodeExec", function (code) {
+    console.log("server " + code);
+    io.emit("setCodeExec", code);
   });
 });
 
