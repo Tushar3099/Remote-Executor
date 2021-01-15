@@ -28,16 +28,16 @@ routes(app);
 
 io.on("connection", (socket) => {
   socket.on("getLanguage", function (lang) {
-    console.log("server " + lang);
+    // console.log("server " + lang);
     io.emit("setLanguage", lang);
   });
 
   socket.on("getInput", function (input) {
-    console.log("server " + input);
+    // console.log("server " + input);
     io.emit("setInput", input);
   });
   socket.on("getOutput", function (output) {
-    console.log("server " + output);
+    // console.log("server " + output);
     io.emit("setOutput", output);
   });
 
