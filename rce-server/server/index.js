@@ -1,5 +1,6 @@
 import "./common/env";
 import routes from "./routes";
+import database from "./database";
 const Express = require("express");
 const app = new Express();
 import * as bodyParser from "body-parser";
@@ -12,6 +13,8 @@ const io = require("socket.io")(http, {
   },
 });
 import cors from "cors";
+
+database();
 
 app.use(bodyParser.json({ limit: process.env.REQUEST_LIMIT || "100kb" }));
 app.use(
@@ -42,7 +45,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("getCodeExec", function (code) {
-    console.log("server " + code);
+    // console.log("server " + code);
     io.emit("setCodeExec", code);
   });
 });
