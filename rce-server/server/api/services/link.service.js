@@ -7,7 +7,7 @@ class LinkService {
   async generate(user) {
     try {
       const uid = crypto.randomBytes(16).toString("hex");
-      const link = BASE_URI + uid;
+      const link = `${BASE_URI}/interview/${uid}`;
 
       const generatedLink = await Link.create({
         link,

@@ -3,7 +3,7 @@ import LinkService from "../../services/link.service";
 export class Controller {
   async generateLink(req, res) {
     try {
-      console.log(req.user);
+      // console.log(req.user);
       if (!req.user) {
         throw {
           message: "User must be logged in!!",
