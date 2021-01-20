@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 const User = require("../../models/user");
-const JWT_SECRET = "abcd";
+const JWT_SECRET = process.env.JWT_SECRET;
 
 class AuthService {
   async execute(email, name, dp) {

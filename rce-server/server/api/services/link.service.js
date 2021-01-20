@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import crypto from "crypto";
 const Link = require("../../models/link");
-const BASE_URI = "http://localhost:3000/";
+const BASE_URI = process.env.BASE_URI;
 
 class LinkService {
   async generate(user) {

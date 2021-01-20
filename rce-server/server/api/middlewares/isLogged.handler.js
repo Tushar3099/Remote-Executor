@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 import User from "../../models/user";
-const JWT_SECRET = "abcd";
+const JWT_SECRET = process.env.JWT_SECRET;
 
 module.exports = (req, res, next) => {
   try {
