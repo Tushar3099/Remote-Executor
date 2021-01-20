@@ -26,7 +26,7 @@ module.exports = (req, res, next) => {
       });
     });
   } catch (error) {
-    return res.status(err.status || 500).json({
+    return res.status(error.status || 500).json({
       status: error.status || "500",
       message: error.message || "Something Went Wrong",
     });

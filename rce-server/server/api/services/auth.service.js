@@ -9,22 +9,14 @@ class AuthService {
       let setUser = "";
       const user = await User.findOne({ email });
       if (!user) {
-        const newUser = new User({
+        const newUser = await User.create({
           email,
           name,
           dp,
         });
-        newUser
-          .save()
-          .then((user) => {
-            setUser = user;
-          })
-          .catch((err) => {
-            throw {
-              status: err.status,
-              message: err.message,
-            };
-          });
+        if (newUser) {
+          setUser = newUser;
+        }
       } else {
         setUser = user;
       }

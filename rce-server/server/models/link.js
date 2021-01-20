@@ -12,13 +12,17 @@ const linkSchema = new mongoose.Schema(
       type: ObjectId,
       ref: "User",
     },
-    // interviewee: [
-    //   {
-    //     email: {
-    //       type: String,
-    //     },
-    //   },
-    // ],
+    email: [
+      {
+        type: String,
+      },
+    ],
+    interviewee: [
+      {
+        type: ObjectId,
+        ref: "User",
+      },
+    ],
   },
   { timestamps: true }
 );
