@@ -9,17 +9,18 @@ export class Controller {
         };
       } else {
         const output = await LinkService.generate(req.user);
-        // if (output) {
-        //   return res.json({
-        //     status: 200,
-        //     message: "Successfully generated link!!",
-        //     link,
-        //   });
-        // } else {
-        //   throw {
-        //     message: "Some error occurred. Try again!!",
-        //   };
-        // }
+        if (output) {
+          console.log(output);
+          return res.json({
+            status: 200,
+            message: "Successfully generated link!!",
+            output,
+          });
+        } else {
+          throw {
+            message: "Some error occurred. Try again!!",
+          };
+        }
       }
     } catch (error) {
       res.send({

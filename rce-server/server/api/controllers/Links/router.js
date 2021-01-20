@@ -1,4 +1,7 @@
 import * as express from "express";
 import controller from "./controller";
+import isLoggedIn from "../../middlewares/isLogged.handler";
 
-export default express.Router().post("/link", controller.generateLink);
+export default express
+  .Router()
+  .post("/generate", isLoggedIn, controller.generateLink);

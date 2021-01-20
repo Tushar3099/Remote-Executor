@@ -1,41 +1,33 @@
 import mongoose from "mongoose";
-import { v4 as uuidv4 } from "uuid";
+import crypto from "crypto";
 const Link = require("../../models/link");
+const BASE_URI = "http://localhost:3000/";
 
 class LinkService {
   async generate(user) {
     try {
-      const uid = uuidv4();
+      var setLink = "";
+      const uid = crypto.randomBytes(16).toString("hex");
       const link = BASE_URI + uid;
-      const isLink = await Link.findOne({ link });
-      if (isLink) {
-        throw {
-          message: "Try Again",
-        };
-      } else {
-        const generatedLink = new Link({
-          link,
-          interviewer: {
-            email: user.email,
-            name: user.name,
-            dp: user.dp,
-          },
+      // console.log(link);
+      const generatedLink = new Link({
+        link,
+        interviewer: user._id,
+      });
+      generatedLink
+        .save()
+        .then((newLink) => {
+          // console.log(newLink.link);
+          // setLink = newLink;
+          return newLink;
+        })
+        .catch((err) => {
+          throw {
+            message: "Internal error: " + err.message,
+            status: err.status,
+          };
         });
-        generatedLink
-          .save()
-          .then((newLink) => {
-            return res.json({
-              message: "Generated link for interview!",
-              link: newLink,
-            });
-          })
-          .catch((err) => {
-            throw {
-              message: "Internal error: " + err.message,
-              status: err.status,
-            };
-          });
-      }
+      // return setLink;
     } catch (error) {
       res.send({
         status: error.status || "500",
