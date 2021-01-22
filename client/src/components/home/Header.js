@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setUser } from '../../reducers/actions';
 import { FcGoogle } from 'react-icons/fc';
 import Modal from './Modal';
-import { auth } from '../../actions/user';
+import { auth, fetchUser, logoutUser } from '../../actions/user';
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -29,18 +29,19 @@ const Header = () => {
   };
 
   const authorize = async user => {
-    const res = await auth(user);
-    dispatch(res);
+    if (localStorage.getItem('codex_token')) {
+      const res = await fetchUser();
+      dispatch(res);
+    } else {
+      const res = await auth(user);
+      dispatch(res);
+    }
   };
 
   const logout = () => {
     console.log('User logged Out');
-    const user = {
-      email: '',
-      name: '',
-      image: ''
-    };
-    dispatch(setUser(user));
+
+    dispatch(logoutUser());
     setClicked(false);
   };
 

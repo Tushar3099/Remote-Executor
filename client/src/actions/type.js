@@ -4,3 +4,4 @@ export const SET_LOADING_TRUE = 'SET_LOADING_TRUE';
 export const SET_AUTH_SUCCESS = 'SET_AUTH_SUCCESS';
 export const SET_AUTH_FAILURE = 'SET_AUTH_FAILURE';
 export const LOGOUT = 'LOGOUT';
+export const FETCH_USER_SUCCESS = 'FETCH_USER_SUCCESS';

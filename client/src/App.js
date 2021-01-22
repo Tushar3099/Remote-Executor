@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import CodeEditorIndex from './components/code-editor/CodeEditorIndex';
 import CollabEditorIndex from './components/code-editor/CollabEditorIndex';
