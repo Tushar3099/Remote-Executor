@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
@@ -7,18 +7,30 @@ import { X, Copy, Link } from 'react-feather';
 import { generateInterviewLink } from '../../actions/interview-link';
 import Loader from 'react-loader-spinner';
 import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 const InterviewModal = ({ open, handleClose }) => {
+  const textareaRef = useRef(null);
+  const history = useHistory();
   const link = useSelector(state => state.interviewLink);
+
   const interviewLink = () => {
     return `${window.location.href}interview/${link.generatedLinkAsInterviewer}`;
   };
+
+  const onCopyLink = e => {
+    navigator.clipboard.writeText(interviewLink());
+  };
+
+  const onVisitLink = () => {
+    history.push(`/interview/${link.generatedLinkAsInterviewer}`);
+  };
+
   return (
     <Modal
       aria-labelledby='transition-modal-title'
       aria-describedby='transition-modal-description'
       open={open}
-      onClose={handleClose}
       closeAfterTransition
       BackdropComponent={Backdrop}
       BackdropProps={{
@@ -43,12 +55,12 @@ const InterviewModal = ({ open, handleClose }) => {
           ) : (
             <div className={styles.link_container}>
               <div className={styles.link}>
-                <p>{interviewLink()}</p>
+                <p ref={textareaRef}>{interviewLink()}</p>
               </div>
-              <div className={styles.copy}>
+              <div className={styles.copy} onClick={onCopyLink}>
                 <Copy color={'gainsboro'} />
               </div>
-              <div className={styles.copy}>
+              <div className={styles.copy} onClick={onVisitLink}>
                 <Link color={'gainsboro'} />
               </div>
             </div>

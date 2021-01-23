@@ -1,11 +1,13 @@
 import {
   SET_INTERVIEW_LINK_LOADING_TRUE,
-  INTERVIEW_LINK_GENERATION_SUCCESS
+  INTERVIEW_LINK_GENERATION_SUCCESS,
+  FETCH_HOSTED_LINKS_SUCCESS
 } from '../actions/type';
 
 const initialState = {
   loading: false,
-  generatedLinkAsInterviewer: ''
+  generatedLinkAsInterviewer: '',
+  hostedLinks: []
 };
 
 export default function(state = initialState, action) {
@@ -21,6 +23,11 @@ export default function(state = initialState, action) {
         ...state,
         loading: false,
         generatedLinkAsInterviewer: payload
+      };
+    case FETCH_HOSTED_LINKS_SUCCESS:
+      return {
+        ...state,
+        hostedLinks: action.payload
       };
     default:
       return state;

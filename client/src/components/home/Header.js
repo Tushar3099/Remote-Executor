@@ -7,10 +7,14 @@ import { setUser } from '../../reducers/actions';
 import { FcGoogle } from 'react-icons/fc';
 import Modal from './Modal';
 import { auth, fetchUser, logoutUser } from '../../actions/user';
+import { Menu } from 'react-feather';
+import MenuDrawer from './Menu';
+import { isLoggedIn } from '../../utils/isLoggedIn';
 
 const Header = () => {
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
+  const [openMenu, setOpenMenu] = useState(false);
   const [clicked, setClicked] = useState(false);
 
   const responseGoogle = res => {
@@ -39,8 +43,6 @@ const Header = () => {
   };
 
   const logout = () => {
-    console.log('User logged Out');
-
     dispatch(logoutUser());
     setClicked(false);
   };
@@ -53,9 +55,16 @@ const Header = () => {
     setClicked(!clicked);
   };
 
+  const toggleMenu = () => {
+    setOpenMenu(!openMenu);
+  };
+
   return (
     <>
       <div className={styles.header_container}>
+        {isLoggedIn() && (
+          <Menu size={50} color={'#ffffff'} onClick={toggleMenu} />
+        )}
         {user.name == '' ? (
           <GoogleLogin
             clientId='356951841595-6v3gpur9sleddtq4l350j62gf8dp8mfj.apps.googleusercontent.com'
@@ -95,10 +104,9 @@ const Header = () => {
             </div>
           </>
         )}
-
-        {/* <button className={styles.header_button}>Login</button> */}
       </div>
       <Footer />
+      <MenuDrawer open={openMenu} handleClose={toggleMenu} />
     </>
   );
 };

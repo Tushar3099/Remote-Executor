@@ -97,6 +97,11 @@ class LinkService {
       throw error;
     }
   }
+
+  async fetchHostLinks(user) {
+    const links = await Link.find({ interviewer: user._id.toString() });
+    return links;
+  }
 }
 
 export default new LinkService();
