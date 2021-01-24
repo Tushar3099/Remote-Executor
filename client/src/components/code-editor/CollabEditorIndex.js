@@ -5,9 +5,9 @@ import { GlobalStyles } from "../../constants/global";
 import { useDarkMode } from "../../utils/useDarkMode";
 import Header from "./Header.js";
 import Footer from "./Footer.js";
-import Editor from "./Editor";
+import Editor from "./CollabEditor";
 
-const CodeEditorIndex = (props) => {
+const CollabEditorIndex = (props) => {
   const [theme, toggleTheme, componentMounted] = useDarkMode();
 
   const themeMode = theme === "light" ? lightTheme : darkTheme;
@@ -15,16 +15,15 @@ const CodeEditorIndex = (props) => {
   if (!componentMounted) {
     return <div />;
   }
-  // console.log(props.match.params)
 
   return (
     <ThemeProvider theme={themeMode}>
       <GlobalStyles />
       <Header theme={theme} toggleTheme={toggleTheme} />
       <Footer />
-      <Editor theme={theme} id={props.match.params.id}/>
+      <Editor theme={theme} roomId={props.match.params.id}/>
     </ThemeProvider>
   );
 };
 
-export default CodeEditorIndex;
+export default CollabEditorIndex;
