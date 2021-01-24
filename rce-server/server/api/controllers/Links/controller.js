@@ -127,6 +127,30 @@ export class Controller {
       });
     }
   }
+
+  async fetchInterviewee(req, res) {
+    try {
+      if (!req.user) {
+        throw {
+          message: 'User must be logged in!!'
+        };
+      } else {
+        const { link } = req.query;
+        const interviewee = await LinkService.fetchInterviewee(link, req.user);
+
+        return res.json({
+          status: 200,
+          message: 'Fetched links successfully',
+          interviewee
+        });
+      }
+    } catch (err) {
+      res.send({
+        status: err.status || '500',
+        message: err.message || 'Something went wrong'
+      });
+    }
+  }
 }
 
 export default new Controller();

@@ -102,6 +102,21 @@ class LinkService {
     const links = await Link.find({ interviewer: user._id.toString() });
     return links;
   }
+
+  async fetchInterviewee(link, user) {
+    try {
+      const isLink = await Link.findOne({ link });
+      if (isLink) {
+        return isLink.email;
+      } else {
+        throw {
+          message: 'Link not found!'
+        };
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 export default new LinkService();

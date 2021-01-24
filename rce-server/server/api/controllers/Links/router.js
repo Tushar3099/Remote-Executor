@@ -8,4 +8,5 @@ export default express
   .post('/delete', isLoggedIn, controller.deleteLink)
   .put('/addEmail', isLoggedIn, controller.addEmail)
   .put('/removeEmail', isLoggedIn, controller.removeEmail)
-  .get('/fetchHostedLinks', isLoggedIn, controller.fetchHostedMeetingLinks);
+  .get('/fetchHostedLinks', isLoggedIn, controller.fetchHostedMeetingLinks)
+  .get('/fetchInterviewee', isLoggedIn, controller.fetchInterviewee);
