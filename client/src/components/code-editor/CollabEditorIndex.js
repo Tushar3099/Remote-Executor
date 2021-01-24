@@ -1,16 +1,25 @@
-import React, { useEffect } from "react";
-import { ThemeProvider } from "styled-components";
-import { lightTheme, darkTheme } from "../../constants/theme";
-import { GlobalStyles } from "../../constants/global";
-import { useDarkMode } from "../../utils/useDarkMode";
-import Header from "./Header.js";
-import Footer from "./Footer.js";
-import Editor from "./CollabEditor";
+import React, { useEffect } from 'react';
+import { ThemeProvider } from 'styled-components';
+import { lightTheme, darkTheme } from '../../constants/theme';
+import { GlobalStyles } from '../../constants/global';
+import { useDarkMode } from '../../utils/useDarkMode';
+import Footer from './Footer.js';
+import Editor from './CollabEditor';
+import { useHistory } from 'react-router-dom';
+import { isLoggedIn } from '../../utils/isLoggedIn';
+import HeaderCollab from './HeaderCollab';
 
 const CollabEditorIndex = (props) => {
   const [theme, toggleTheme, componentMounted] = useDarkMode();
+  const history = useHistory();
 
-  const themeMode = theme === "light" ? lightTheme : darkTheme;
+  const themeMode = theme === 'light' ? lightTheme : darkTheme;
+
+  useEffect(() => {
+    if (!isLoggedIn()) {
+      history.push('/');
+    }
+  }, []);
 
   if (!componentMounted) {
     return <div />;
@@ -19,7 +28,7 @@ const CollabEditorIndex = (props) => {
   return (
     <ThemeProvider theme={themeMode}>
       <GlobalStyles />
-      <Header theme={theme} toggleTheme={toggleTheme} />
+      <HeaderCollab theme={theme} toggleTheme={toggleTheme} />
       <Footer />
       <Editor theme={theme} roomId={props.match.params.id}/>
     </ThemeProvider>
