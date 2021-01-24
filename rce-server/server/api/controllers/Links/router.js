@@ -9,4 +9,5 @@ export default express
   .put('/addEmail', isLoggedIn, controller.addEmail)
   .put('/removeEmail', isLoggedIn, controller.removeEmail)
   .get('/fetchHostedLinks', isLoggedIn, controller.fetchHostedMeetingLinks)
-  .get('/fetchInterviewee', isLoggedIn, controller.fetchInterviewee);
+  .get('/fetchInterviewee', isLoggedIn, controller.fetchInterviewee)
+  .get('/checkaccess', isLoggedIn, controller.checkAccess);

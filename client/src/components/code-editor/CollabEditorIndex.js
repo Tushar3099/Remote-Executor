@@ -8,8 +8,9 @@ import Editor from './CollabEditor';
 import { useHistory } from 'react-router-dom';
 import { isLoggedIn } from '../../utils/isLoggedIn';
 import HeaderCollab from './HeaderCollab';
+import { checkAccess } from '../../actions/interview-link';
 
-const CollabEditorIndex = () => {
+const CollabEditorIndex = props => {
   const [theme, toggleTheme, componentMounted] = useDarkMode();
   const history = useHistory();
 
@@ -18,8 +19,15 @@ const CollabEditorIndex = () => {
   useEffect(() => {
     if (!isLoggedIn()) {
       history.push('/');
+    } else {
+      checkAccessForLink();
     }
   }, []);
+
+  const checkAccessForLink = async () => {
+    const access = await checkAccess(props.match.params.id);
+    if (!access) history.push('/');
+  };
 
   if (!componentMounted) {
     return <div />;

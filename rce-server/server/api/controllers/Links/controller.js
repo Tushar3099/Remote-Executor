@@ -151,6 +151,37 @@ export class Controller {
       });
     }
   }
+
+  async checkAccess(req, res) {
+    try {
+      if (!req.user) {
+        throw {
+          message: 'User must be logged in!!'
+        };
+      } else {
+        const { link } = req.query;
+        const access = await LinkService.checkAccess(link, req.user);
+        if (access) {
+          res.send({
+            status: 200,
+            message: 'Valid Access',
+            access
+          });
+        } else {
+          res.send({
+            status: 200,
+            message: 'Invalid Access',
+            access
+          });
+        }
+      }
+    } catch (err) {
+      res.send({
+        status: err.status || '500',
+        message: err.message || 'Something went wrong'
+      });
+    }
+  }
 }
 
 export default new Controller();

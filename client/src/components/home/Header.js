@@ -10,9 +10,11 @@ import { auth, fetchUser, logoutUser } from '../../actions/user';
 import { Menu } from 'react-feather';
 import MenuDrawer from './Menu';
 import { isLoggedIn } from '../../utils/isLoggedIn';
+import { useHistory } from 'react-router-dom';
 
 const Header = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
   const user = useSelector(state => state.user);
   const [openMenu, setOpenMenu] = useState(false);
   const [clicked, setClicked] = useState(false);
@@ -44,6 +46,7 @@ const Header = () => {
 
   const logout = () => {
     dispatch(logoutUser());
+    history.push('/');
     setClicked(false);
   };
 

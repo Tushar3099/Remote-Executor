@@ -12,6 +12,7 @@ import {
 import { useDispatch } from 'react-redux';
 import { isLoggedIn } from '../../utils/isLoggedIn';
 import { alert } from '../../actions/alert';
+import EnterInterviewModal from './EnterInterviewModal';
 
 const color = [
   '#ee7752',
@@ -47,6 +48,7 @@ const Terminal = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const [openHostInterviewModal, setOpenHostInterviewModal] = useState(false);
+  const [openEnterInterview, setOpenEnterInterview] = useState(false);
 
   const onHostInterview = async () => {
     if (isLoggedIn()) {
@@ -58,6 +60,11 @@ const Terminal = () => {
       alert('error', 'Login is required');
     }
   };
+
+  const onEnterInterview = () => {
+    setOpenEnterInterview(!openEnterInterview);
+  };
+
   const body = {
     visible: { opacity: 1, x: 0 },
     hidden: { opacity: 0, x: 100 }
@@ -192,6 +199,7 @@ const Terminal = () => {
             animate='visible'
             initial='hidden'
             custom={4.5}
+            onClick={onEnterInterview}
           >
             <span></span>
             <span></span>
@@ -206,6 +214,10 @@ const Terminal = () => {
         handleClose={() => {
           setOpenHostInterviewModal(false);
         }}
+      />
+      <EnterInterviewModal
+        open={openEnterInterview}
+        handleClose={onEnterInterview}
       />
     </>
   );

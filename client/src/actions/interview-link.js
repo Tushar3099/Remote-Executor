@@ -10,7 +10,8 @@ import {
   ADD_COLLAB_FAILURE,
   ADD_COLLAB_SUCCESS,
   FETCH_COLLAB_SUCCESS,
-  FETCH_COLLAB_FAILURE
+  FETCH_COLLAB_FAILURE,
+  FETCH_LINK_DETAIL
 } from './type';
 import { api_route } from './route';
 import { alert } from './alert';
@@ -131,6 +132,25 @@ export const fetchCollab = async link => {
     return {
       type: FETCH_COLLAB_FAILURE
     };
+  }
+};
+
+export const checkAccess = async link => {
+  try {
+    const res = await axios.get(`${api_route}/link/checkaccess?link=${link}`);
+    if (res.data.access) {
+      alert('success', res.data.message);
+      return true;
+    } else {
+      console.log('hereup');
+      alert('error', res.data.message);
+      return false;
+    }
+    //return res.data.access;
+  } catch (error) {
+    console.log('here');
+    alert('error', error.message);
+    return false;
   }
 };
 
