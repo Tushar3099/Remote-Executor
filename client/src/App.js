@@ -9,8 +9,8 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import HostedInterview from './components/hosted-interview/HostedInterview';
 
-if (localStorage.getItem('codex_token')) {
-  setAuthToken(localStorage.getItem('codex_token'));
+if (localStorage.getItem("codex_token")) {
+  setAuthToken(localStorage.getItem("codex_token"));
 }
 
 const App = () => {
@@ -18,9 +18,13 @@ const App = () => {
     <Router>
       <div className={styles.App}>
         <Switch>
-          <Route exact path='/ide' component={CodeEditorIndex} />
           <Route exact path='/' component={Home} />
-          <Route path='/interview/:id' component={CollabEditorIndex} />
+          <Route exact path={["/ide"]} component={CodeEditorIndex} />
+          <Route
+            exact
+            path={["/interview/:id"]}
+            render={(props) => <CollabEditorIndex {...props} />}
+          />
           <Route path='/hosted-interviews' component={HostedInterview} />
         </Switch>
         <ToastContainer position={'bottom-right'} />
