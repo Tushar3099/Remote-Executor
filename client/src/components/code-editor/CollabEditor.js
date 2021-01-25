@@ -1,34 +1,32 @@
-import React, { useRef, useState, useEffect } from "react";
-import { ControlledEditor } from "@monaco-editor/react";
-import { executeCode, setLoadingTrue } from "../../actions/code";
-import { useDispatch, useSelector } from "react-redux";
-import Input from "./Input";
-import Submit from "./Submit";
-import Split from "react-split";
-import styled from "styled-components";
-import styles from "./styles/editor.module.css";
-import "./styles/style.css";
-import io from "socket.io-client";
-import { Play } from "react-feather";
-import Peer from "peerjs";
-import Draggable from "react-draggable";
-import { BiLinkExternal } from "react-icons/bi";
-import { MdDragHandle, MdAirplay } from "react-icons/md";
+import React, { useRef, useState, useEffect } from 'react';
+import { ControlledEditor } from '@monaco-editor/react';
+import { executeCode, setLoadingTrue } from '../../actions/code';
+import { useDispatch, useSelector } from 'react-redux';
+import Input from './Input';
+import Submit from './Submit';
+import Split from 'react-split';
+import styled from 'styled-components';
+import styles from './styles/editor.module.css';
+import './styles/style.css';
+import io from 'socket.io-client';
+import { Play } from 'react-feather';
+import Peer from 'peerjs';
+import Draggable from 'react-draggable';
+import { BiLinkExternal } from 'react-icons/bi';
+import { MdDragHandle, MdAirplay } from 'react-icons/md';
 import {
   getDefaultCode,
   setLanguageLocalStorage,
   getLanguageLocalStorage,
   setCodeLocalStorage,
-  getCodeLocalStorage,
-} from "./utils/code-settings";
+  getCodeLocalStorage
+} from './utils/code-settings';
 
-const ENDPOINT = "http://localhost:3000";
-
-const socket = io(ENDPOINT);
+const ENDPOINT = 'http://localhost:3000';
 
 const mypeer = new Peer(undefined, {
-  host: "/",
-  port: "3001",
+  host: '/',
+  port: '3001'
 });
 
 const OutputWindow = styled.div`
@@ -37,83 +35,101 @@ const OutputWindow = styled.div`
   box-sizing: border-box;
   overflow: auto;
   flex: 1;
-  max-height : 60vh;
-  color: ${(props) => (props.error ? "red" : "black")};
+  max-height: 60vh;
+  color: ${props => (props.error ? 'red' : 'black')};
 `;
 
-const CodeEditor = ({ theme, roomId }) => {
-  const loading = useSelector((state) => state.code.isFetching);
+const CodeEditor = ({ theme, roomId, socket }) => {
+  const loading = useSelector(state => state.code.isFetching);
   const [isEditorReady, setIsEditorReady] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   // const [windowHeight, setWindowHeight] = useState(window.innerHeight);
-  const [language, setLanguage] = useState("java");
-  const [input, setInput] = useState("");
+  const [language, setLanguage] = useState('java');
+  const [input, setInput] = useState('');
   const [token, setToken] = useState(null);
-  const [code, setCode] = useState("");
+  const [code, setCode] = useState('');
   const dispatch = useDispatch();
   const valueGetter = useRef();
-  let output = useSelector((state) => state.code.output);
+  let output = useSelector(state => state.code.output);
 
-  let error = useSelector((state) => state.code.error);
+  let error = useSelector(state => state.code.error);
 
   useEffect(() => {
-    window.addEventListener("resize", updateWindowDimensions);
+    window.addEventListener('resize', updateWindowDimensions);
 
-    if (getLanguageLocalStorage()) {
-      setLanguage(getLanguageLocalStorage());
-      if (getCodeLocalStorage()) {
-        setCode(getCodeLocalStorage());
-      } else setCode(getDefaultCode(getLanguageLocalStorage()));
-    } else {
-      setCode(getDefaultCode(language));
-    }
+    // if (getLanguageLocalStorage()) {
+    //   setLanguage(getLanguageLocalStorage());
+    //   if (getCodeLocalStorage()) {
+    //     setCode(getCodeLocalStorage());
+    //   } else setCode(getDefaultCode(getLanguageLocalStorage()));
+    // } else {
+    //   setCode(getDefaultCode(language));
+    // }
 
     return () => {
-      window.removeEventListener("resize", updateWindowDimensions);
+      window.removeEventListener('resize', updateWindowDimensions);
     };
   }, []);
 
   useEffect(() => {
-    console.log("socket: browser says ping (1)");
-    socket.on("setLanguage", function (data) {
-      // console.log(data);
-      setLanguageLocalStorage(data);
-      setCode(getDefaultCode(data));
-      setCodeLocalStorage(getDefaultCode(data));
+    socket.on('setLanguage', data => {
+      console.log('setLanguage', data);
       setLanguage(data);
     });
-    socket.on("setInput", (data) => {
+
+    socket.on('setInput', data => {
       setInput(data);
     });
-    socket.on("setOutput", (data) => {
+    socket.on('setOutput', data => {
       dispatch(data);
     });
-    socket.on("setCodeExec", (data) => {
-      setCodeLocalStorage(data);
+    socket.on('setCodeExec', data => {
       setCode(data);
     });
   }, []);
 
+  // useEffect(() => {
+  //   console.log("socket: browser says ping (1)");
+
+  //   socket.on("setLanguage", function (data) {
+  //     // console.log(data);
+  //     setLanguageLocalStorage(data);
+  //     setCode(getDefaultCode(data));
+  //     setCodeLocalStorage(getDefaultCode(data));
+  //     setLanguage(data);
+  //   });
+  //   socket.on("setInput", (data) => {
+  //     setInput(data);
+  //   });
+  //   socket.on("setOutput", (data) => {
+  //     dispatch(data);
+  //   });
+  //   socket.on("setCodeExec", (data) => {
+  //     setCodeLocalStorage(data);
+  //     setCode(data);
+  //   });
+  // }, []);
+
   useEffect(() => {
-    mypeer.on("open", (vdid) => {
-      console.log("id ", vdid);
+    mypeer.on('open', vdid => {
+      console.log('id ', vdid);
       setToken(vdid);
-      getMedia().then((media) => addVideoStream(media, vdid, true));
-      socket.emit("joinRoom", roomId, vdid);
+      getMedia().then(media => addVideoStream(media, vdid, true));
+      socket.emit('joinRoom', roomId, vdid);
     });
 
-    socket.on("userDisconnected", (userToken) => {
-      console.log("userDisconnected ", userToken);
+    socket.on('userDisconnected', userToken => {
+      console.log('userDisconnected ', userToken);
       const vidElement = document.getElementsByClassName(`${userToken}`);
       vidElement[0].remove();
     });
-    socket.on("fromOldUser", (token) => {
-      console.log("fromOldUser ", token);
-      mypeer.on("call", (call) => {
-        console.log("call from peer");
-        getMedia().then((media) => call.answer(media));
-        call.on("stream", (stream) => {
-          console.log("stream ", token);
+    socket.on('fromOldUser', token => {
+      console.log('fromOldUser ', token);
+      mypeer.on('call', call => {
+        console.log('call from peer');
+        getMedia().then(media => call.answer(media));
+        call.on('stream', stream => {
+          console.log('stream ', token);
           addVideoStream(stream, token, false);
         });
       });
@@ -122,19 +138,19 @@ const CodeEditor = ({ theme, roomId }) => {
 
   useEffect(() => {
     if (token) {
-      socket.on("userConnected", (vdid, socketId) => {
-        getMedia().then((media) => {
-          console.log("vdid", vdid);
+      socket.on('userConnected', (vdid, socketId) => {
+        getMedia().then(media => {
+          console.log('vdid', vdid);
           const call = mypeer.call(vdid, media);
-          call.on("stream", (stream) => {
+          call.on('stream', stream => {
             addVideoStream(stream, vdid, false);
           });
-          call.on("close", () => {
+          call.on('close', () => {
             const video = document.querySelector(`.${vdid}`);
             video.remove();
           });
-          console.log("userConnected", vdid);
-          socket.emit("sendNewUser", token, socketId);
+          console.log('userConnected', vdid);
+          socket.emit('sendNewUser', token, socketId);
         });
       });
     }
@@ -145,23 +161,23 @@ const CodeEditor = ({ theme, roomId }) => {
     // setWindowHeight(window.innerHeight);
   };
 
-  const handleEditorDidMount = (_valueGetter) => {
+  const handleEditorDidMount = _valueGetter => {
     setIsEditorReady(true);
     valueGetter.current = _valueGetter;
   };
 
   const addVideoStream = (media, id, isMuted) => {
-    const myVideo = document.createElement("video");
+    const myVideo = document.createElement('video');
     const exist = document.getElementsByClassName(`${id}`);
     console.log(exist.length);
     if (exist.length) return;
     myVideo.classList.add(id);
-    const VideoGrid = document.querySelector(".videoBox");
+    const VideoGrid = document.querySelector('.videoBox');
     myVideo.muted = isMuted;
     myVideo.controls = true;
     myVideo.disablePictureInPicture = true;
     myVideo.srcObject = media;
-    myVideo.addEventListener("loadedmetadata", () => {
+    myVideo.addEventListener('loadedmetadata', () => {
       myVideo.play();
     });
     VideoGrid.append(myVideo);
@@ -170,14 +186,14 @@ const CodeEditor = ({ theme, roomId }) => {
   const getMedia = async () => {
     return await navigator.mediaDevices.getUserMedia({
       video: { frameRate: { ideal: 10, max: 15 } },
-      audio: { noiseSuppression: true, echoCancellation: true },
+      audio: { noiseSuppression: true, echoCancellation: true }
     });
   };
 
   const onChangeCode = (newValue, e) => {
     // console.log("onChange" + e);
-    socket.emit("getCodeExec", e);
-    setCodeLocalStorage(e);
+    socket.emit('getCodeExec', roomId, e);
+    //setCodeLocalStorage(e);
     setCode(e);
   };
 
@@ -186,37 +202,37 @@ const CodeEditor = ({ theme, roomId }) => {
     const res = await executeCode(code, language, input);
     dispatch(res);
     // getOutput();
-    socket.emit("getOutput", res);
+    socket.emit('getOutput', roomId, res);
   };
 
-  const changeLanguage = (e) => {
-    setLanguageLocalStorage(e.target.value);
-    setCode(getDefaultCode(e.target.value));
-    setCodeLocalStorage(getDefaultCode(e.target.value));
-    socket.emit("getLanguage", e.target.value);
+  const changeLanguage = e => {
+    // setLanguageLocalStorage(e.target.value);
+    // setCode(getDefaultCode(e.target.value));
+    // setCodeLocalStorage(getDefaultCode(e.target.value));
+    socket.emit('getLanguage', roomId, e.target.value);
     setLanguage(e.target.value);
   };
 
   const HideVideo = () => {
-    const VidGrid = document.querySelector(".videogrid");
-    VidGrid.classList.add("hide");
+    const VidGrid = document.querySelector('.videogrid');
+    VidGrid.classList.add('hide');
   };
 
   const ShowVideo = () => {
-    const VidGrid = document.querySelector(".videogrid");
-    VidGrid.classList.remove("hide");
+    const VidGrid = document.querySelector('.videogrid');
+    VidGrid.classList.remove('hide');
   };
 
   return (
     <>
       <div className={styles.row}>
         <Split
-          direction={windowWidth > 800 ? "horizontal" : "vertical"}
+          direction={windowWidth > 800 ? 'horizontal' : 'vertical'}
           sizes={[60, 40]}
           minSize={windowWidth > 800 ? 0 : 500}
           snapOffset={windowWidth > 800 ? 200 : 0}
           gutterSize={20}
-          gutterAlign="center"
+          gutterAlign='center'
           className={styles.splitHor}
         >
           <div className={styles.left}>
@@ -227,14 +243,14 @@ const CodeEditor = ({ theme, roomId }) => {
                 onClick={SubmitCode}
                 disabled={!isEditorReady}
               >
-                {loading ? "Loading.." : "Run Code"}
-                <Play style={{ paddingLeft: 10, fontSize: "1em" }} />
+                {loading ? 'Loading..' : 'Run Code'}
+                <Play style={{ paddingLeft: 10, fontSize: '1em' }} />
               </div>
             </div>
             <ControlledEditor
-              className="editor"
+              className='editor'
               language={language}
-              theme={theme === "dark" ? "vs-dark" : "light"}
+              theme={theme === 'dark' ? 'vs-dark' : 'light'}
               editorDidMount={handleEditorDidMount}
               value={code}
               onChange={onChangeCode}
@@ -243,12 +259,12 @@ const CodeEditor = ({ theme, roomId }) => {
           <div className={styles.right}>
             <div className={styles.column}>
               <Split
-                direction="vertical"
+                direction='vertical'
                 sizes={windowWidth > 800 ? [75, 25] : [100, 0]}
                 minSize={0}
                 snapOffset={windowWidth > 800 ? 100 : 0}
                 gutterSize={20}
-                gutterAlign="center"
+                gutterAlign='center'
                 className={styles.splitVer}
               >
                 <div className={styles.output}>
@@ -258,10 +274,10 @@ const CodeEditor = ({ theme, roomId }) => {
                       <MdAirplay />
                     </div>
                   </div>
-                  <OutputWindow error={error === "" ? false : true}>
+                  <OutputWindow error={error === '' ? false : true}>
                     {output ? console.log(output) : null}
-                    <pre style={{ width: "100%" }}>
-                      {output === "" ? error : output}
+                    <pre style={{ width: '100%' }}>
+                      {output === '' ? error : output}
                     </pre>
                   </OutputWindow>
                 </div>
@@ -272,10 +288,10 @@ const CodeEditor = ({ theme, roomId }) => {
             </div>
           </div>
         </Split>
-        <Draggable handle={".dragHead"} bounds="parent">
-          <div className="videogrid">
-            <div className="dragHead">
-              <MdDragHandle className="dragger" />
+        <Draggable handle={'.dragHead'} bounds='parent'>
+          <div className='videogrid'>
+            <div className='dragHead'>
+              <MdDragHandle className='dragger' />
               <BiLinkExternal
                 style={{ margin: 5 }}
                 onClick={() => {
@@ -283,7 +299,7 @@ const CodeEditor = ({ theme, roomId }) => {
                 }}
               />
             </div>
-            <div className="videoBox"></div>
+            <div className='videoBox'></div>
           </div>
         </Draggable>
       </div>

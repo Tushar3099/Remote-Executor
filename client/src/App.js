@@ -8,24 +8,37 @@ import setAuthToken from './utils/setAuthToken';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import HostedInterview from './components/hosted-interview/HostedInterview';
+import { fetchUser } from './actions/user';
+import { useDispatch } from 'react-redux';
+import Login from './components/login/Login';
 
-if (localStorage.getItem("codex_token")) {
-  setAuthToken(localStorage.getItem("codex_token"));
+if (localStorage.getItem('codex_token')) {
+  setAuthToken(localStorage.getItem('codex_token'));
 }
 
 const App = () => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    fetchUserUtil();
+  }, []);
+
+  const fetchUserUtil = async () => {
+    const res = await fetchUser();
+    dispatch(res);
+  };
   return (
     <Router>
       <div className={styles.App}>
         <Switch>
           <Route exact path='/' component={Home} />
-          <Route exact path={["/ide"]} component={CodeEditorIndex} />
+          <Route exact path={['/ide']} component={CodeEditorIndex} />
           <Route
             exact
-            path={["/interview/:id"]}
-            render={(props) => <CollabEditorIndex {...props} />}
+            path={['/interview/:id']}
+            render={props => <CollabEditorIndex {...props} />}
           />
           <Route path='/hosted-interviews' component={HostedInterview} />
+          <Route path='/login' component={Login} />
         </Switch>
         <ToastContainer position={'bottom-right'} />
       </div>
