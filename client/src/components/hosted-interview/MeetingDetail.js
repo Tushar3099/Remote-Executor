@@ -32,7 +32,7 @@ const MeetingDetail = ({ link }) => {
 
   const onCollab = () => {
     setOpenCollab(!openCollab);
-    fetchCollaborators();
+    //fetchCollaborators();
   };
 
   const fetchCollaborators = async () => {

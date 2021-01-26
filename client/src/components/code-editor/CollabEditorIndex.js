@@ -75,7 +75,11 @@ const CollabEditorIndex = props => {
   return (
     <ThemeProvider theme={themeMode}>
       <GlobalStyles />
-      <HeaderCollab theme={theme} toggleTheme={toggleTheme} />
+      <HeaderCollab
+        theme={theme}
+        toggleTheme={toggleTheme}
+        link={props.match.params.id}
+      />
       <Footer />
       <Editor theme={theme} roomId={props.match.params.id} socket={socket} />
     </ThemeProvider>

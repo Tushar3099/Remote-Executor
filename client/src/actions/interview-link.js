@@ -58,6 +58,7 @@ export const deleteLink = async link => {
     const res = await axios.post(`${api_route}/link/delete`, body, config);
     if (res) {
       const links = await axios.get(`${api_route}/link/fetchHostedLinks`);
+      alert('success', 'Link deleted successfully');
       return {
         type: FETCH_HOSTED_LINKS_SUCCESS,
         payload: links.data.links
@@ -83,6 +84,7 @@ export const addCollab = async (link, email) => {
     const res_interviewee = await axios.get(
       `${api_route}/link/fetchInterviewee?link=${link}`
     );
+    alert('success', `${email} added as collaborator`);
     return {
       type: FETCH_COLLAB_SUCCESS,
       payload: res_interviewee.data.interviewee
@@ -107,6 +109,7 @@ export const deleteCollab = async (link, email) => {
     const res_interviewee = await axios.get(
       `${api_route}/link/fetchInterviewee?link=${link}`
     );
+    alert('success', `${email} removed from collaborators`);
     return {
       type: FETCH_COLLAB_SUCCESS,
       payload: res_interviewee.data.interviewee
