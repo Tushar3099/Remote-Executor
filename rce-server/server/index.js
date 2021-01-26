@@ -33,24 +33,6 @@ routes(app);
 
 io.on('connection', socket => {
   console.log(socket.rooms);
-  // socket.on('getLanguage', function (lang) {
-  //   // console.log("server " + lang);
-  //   io.emit('setLanguage', lang);
-  // });
-
-  // socket.on('getInput', function (input) {
-  //   // console.log("server " + input);
-  //   io.emit('setInput', input);
-  // });
-  // socket.on('getOutput', function (output) {
-  //   // console.log("server " + output);
-  //   io.emit('setOutput', output);
-  // });
-
-  // socket.on('getCodeExec', function (code) {
-  //   // console.log("server " + code);
-  //   io.emit('setCodeExec', code);
-  // });
 
   socket.on('joinRoom', (roomId, token) => {
     socket.join(roomId);
