@@ -34,17 +34,17 @@ routes(app);
 io.on('connection', socket => {
   console.log(socket.rooms);
 
-  socket.on('joinRoom', (roomId, token) => {
+  socket.on('joinRoom', (roomId, token, name) => {
     socket.join(roomId);
-    socket.to(roomId).broadcast.emit('userConnected', token, socket.id);
+    socket.to(roomId).broadcast.emit('userConnected', token, socket.id, name);
 
     socket.on('disconnect', () => {
       socket.to(roomId).broadcast.emit('userDisconnected', token);
     });
   });
 
-  socket.on('sendNewUser', (token, socketId) => {
-    socket.to(socketId).emit('fromOldUser', token);
+  socket.on('sendNewUser', (token, socketId,name) => {
+    socket.to(socketId).emit('fromOldUser', token,name);
   });
 
   interviewSocketIO(socket);
