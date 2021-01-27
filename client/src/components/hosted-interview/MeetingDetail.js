@@ -7,7 +7,7 @@ import { deleteLink, fetchCollab } from '../../actions/interview-link';
 import { useDispatch } from 'react-redux';
 import CollabModal from '../collab-modal/CollabModal';
 
-const MeetingDetail = ({ link }) => {
+const MeetingDetail = ({ link ,index}) => {
   const history = useHistory();
   const dispatch = useDispatch();
   const [openCollab, setOpenCollab] = useState(false);
@@ -41,7 +41,7 @@ const MeetingDetail = ({ link }) => {
   };
 
   return (
-    <>
+    <div key={index}>
       <li>
         <div className={styles.rowDate}>
           <span>{link.link}</span>
@@ -59,7 +59,7 @@ const MeetingDetail = ({ link }) => {
         </div>
       </li>
       <CollabModal open={openCollab} handleClose={onCollab} link={link.link} />
-    </>
+    </div>
   );
 };
 

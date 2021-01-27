@@ -142,7 +142,7 @@ export const checkAccess = async link => {
   try {
     const res = await axios.get(`${api_route}/link/checkaccess?link=${link}`);
     if (res.data.access) {
-      alert('success', res.data.message);
+      // alert('success', res.data.message);
       return true;
     } else {
       console.log('hereup');

@@ -9,11 +9,7 @@ const Header = (props) => {
     <div className={styles.header}>
       <p className={styles.brand}>
         <Code className={styles.icon} />
-        {/* <Link to="/login" style={{ textDecoration: "none", color: "white" }}> */}
-        {/* <div> */}
         Code<span className={styles.letter}>X</span>
-        {/* </div> */}
-        {/* </Link> */}
       </p>
       <ToggleTheme {...props} />
     </div>

@@ -71,8 +71,8 @@ const CollabModal = ({ open, handleClose, link }) => {
           <div className={styles.collaborator_list}>
             <ul>
               {interviewee &&
-                interviewee.map(inter => (
-                  <li>
+                interviewee.map((inter,index) => (
+                  <li key={index}>
                     {inter}
                     <Trash
                       onClick={() => {

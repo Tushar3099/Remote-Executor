@@ -40,8 +40,8 @@ const HostedInterview = () => {
               </div>
             </li>
 
-            {links.map(link => (
-              <MeetingDetail link={link} />
+            {links.map((link,index) => (
+              <MeetingDetail key={index} link={link} />
             ))}
           </ul>
         ) : (
