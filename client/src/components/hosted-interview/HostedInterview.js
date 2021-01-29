@@ -40,8 +40,13 @@ const HostedInterview = () => {
               </div>
             </li>
 
+<<<<<<< HEAD
             {links.map((link) => (
               <MeetingDetail link={link} />
+=======
+            {links.map((link,index) => (
+              <MeetingDetail key={index} link={link} />
+>>>>>>> 710e26a65682717f2ae3bdfd540ef945535a02d3
             ))}
           </ul>
         ) : (

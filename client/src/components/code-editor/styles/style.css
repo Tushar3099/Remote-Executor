@@ -96,6 +96,11 @@ video::-webkit-media-controls-timeline {
   visibility: hidden !important;
 }
 
+.name{
+  margin : 10px;
+  font-weight: 500;
+}
+
 @media only screen and (max-width: 800px) {
   .gutter.gutter-horizontal {
     width: 100% !important;
