@@ -7,7 +7,7 @@ const ROOT_DIR = `${process.cwd()}`;
 const SOURCE_DIR = path.join(ROOT_DIR, "executor");
 const TARGET_DIR = `/app/codes`;
 const IMAGE_NAME = "executor:1.0";
-//const VOL_NAME = `my_vol`;
+// const VOL_NAME = `my_vol`;
 const VOL_NAME = SOURCE_DIR;
 
 class CodeService {
@@ -28,7 +28,7 @@ class CodeService {
         };
       }
 
-      //creating the code,input  files
+      //writing the code,input  files
       const { file, inputFile } = await this.writeFile(code, lang, input, id);
 
       //write command
@@ -51,7 +51,7 @@ class CodeService {
         code
       );
 
-      //return output
+      console.log(SOURCE_DIR);
       if (OUTPUT) {
         console.log("output", OUTPUT.toString());
         return OUTPUT.toString();
@@ -137,13 +137,14 @@ class CodeService {
 
     const runCode = `docker exec ${containerName} sh -c "${command}"`;
 
-    const runContainer = `docker run -it -d --name ${containerName} -v "${VOL_NAME}":${TARGET_DIR} ${IMAGE_NAME}`;
+    const runContainer = `docker run -it -d -m 50M --cpus 0.3 -c 8 --name ${containerName} -v "${VOL_NAME}":${TARGET_DIR} ${IMAGE_NAME}`;
 
     return { runCode, runContainer };
   }
 
   async execChild(runCode, runContainer, id, file, inputFile, lang, code) {
     return new Promise((resolve, reject) => {
+      // console.log(`${runContainer}`);
       const execCont = exec(`${runContainer}`);
       execCont.on("error", (err) => {
         throw { status: "404", message: err };
