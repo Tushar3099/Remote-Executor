@@ -29,7 +29,7 @@ const ENDPOINT = "http://localhost:3000";
 const socket = io(ENDPOINT);
 
 // const mypeer = new Peer(localStorage.getItem("codex_token").split(".")[0]);
-const mypeer = new Peer();
+let mypeer;
 
 const OutputWindow = styled.div`
   border-radius: 5px;
@@ -59,17 +59,31 @@ const CodeEditor = ({ theme, roomId }) => {
   let error = useSelector((state) => state.code.error);
 
   useEffect(() => {
+    if (!token) {
+      mypeer = new Peer();
+      console.log("peer connected");
+    }
+    if (token) {
+      socket.on("userConnected", (vdid, socketId, name) => {
+        getMedia().then((media) => {
+          console.log("vdid", vdid);
+          const call = mypeer.call(vdid, media);
+          call.on("stream", (stream) => {
+            addVideoStream(stream, vdid, false, name);
+          });
+          call.on("close", () => {
+            const video = document.querySelector(`.${vdid}`);
+            video.remove();
+          });
+          console.log("userConnected", vdid);
+          socket.emit("sendNewUser", token, socketId, user.name);
+        });
+      });
+    }
+  }, [token]);
+
+  useEffect(() => {
     window.addEventListener("resize", updateWindowDimensions);
-
-    // if (getLanguageLocalStorage()) {
-    //   setLanguage(getLanguageLocalStorage());
-    //   if (getCodeLocalStorage()) {
-    //     setCode(getCodeLocalStorage());
-    //   } else setCode(getDefaultCode(getLanguageLocalStorage()));
-    // } else {
-    //   setCode(getDefaultCode(language));
-    // }
-
     return () => {
       window.removeEventListener("resize", updateWindowDimensions);
     };
@@ -92,18 +106,6 @@ const CodeEditor = ({ theme, roomId }) => {
     });
   }, []);
 
-  const notify = (message) => {
-    return toast.error(message, {
-      position: "bottom-right",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
-  };
-
   useEffect(() => {
     mypeer.on("error", (err) => {
       if ((err.type = "unavailable-id")) {
@@ -119,15 +121,7 @@ const CodeEditor = ({ theme, roomId }) => {
       const media = await getMedia();
       if (media == null) {
         console.log(media);
-        toast.error("Camera Permission is required for meeting", {
-          position: "bottom-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        notify("Camera Permission is required for meeting");
         history.push("/");
         return;
       }
@@ -155,25 +149,17 @@ const CodeEditor = ({ theme, roomId }) => {
     });
   }, []);
 
-  useEffect(() => {
-    if (token) {
-      socket.on("userConnected", (vdid, socketId, name) => {
-        getMedia().then((media) => {
-          console.log("vdid", vdid);
-          const call = mypeer.call(vdid, media);
-          call.on("stream", (stream) => {
-            addVideoStream(stream, vdid, false, name);
-          });
-          call.on("close", () => {
-            const video = document.querySelector(`.${vdid}`);
-            video.remove();
-          });
-          console.log("userConnected", vdid);
-          socket.emit("sendNewUser", token, socketId, user.name);
-        });
-      });
-    }
-  }, [token]);
+  const notify = (message) => {
+    return toast.error(message, {
+      position: "bottom-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  };
 
   const updateWindowDimensions = () => {
     setWindowWidth(window.innerWidth);
@@ -313,7 +299,12 @@ const CodeEditor = ({ theme, roomId }) => {
                   </OutputWindow>
                 </div>
                 <div className={styles.input}>
-                  <Input input={input} setInput={setInput} theme={theme} />
+                  <Input
+                    input={input}
+                    setInput={setInput}
+                    roomId={roomId}
+                    theme={theme}
+                  />
                 </div>
               </Split>
             </div>
@@ -324,7 +315,7 @@ const CodeEditor = ({ theme, roomId }) => {
             <div className="dragHead">
               <MdDragHandle className="dragger" />
               <BiLinkExternal
-                style={{ margin: 5 }}
+                style={{ margin: 5, cursor: "pointer" }}
                 onClick={() => {
                   HideVideo();
                 }}
