@@ -26,7 +26,8 @@ const MeetingDetail = ({ link, index }) => {
   };
 
   const onLink = () => {
-    history.push(`/interview/${link.link}`);
+    // location.reload(`/interview/${link.link}`);
+    history.push(`/interview/${link.link}`, null);
   };
 
   const onCopy = () => {
@@ -60,18 +61,22 @@ const MeetingDetail = ({ link, index }) => {
           </span>
           <div>
             <CornerDownRight
+              className={styles.icon}
               style={{ marginLeft: 20, cursor: "pointer" }}
               onClick={onLink}
             />
             <Copy
+              className={styles.icon}
               style={{ marginLeft: 20, cursor: "pointer" }}
               onClick={onCopy}
             />
             <UserPlus
+              className={styles.icon}
               style={{ marginLeft: 20, cursor: "pointer" }}
               onClick={onCollab}
             />
             <Trash
+              className={styles.icon}
               style={{ marginLeft: 20, cursor: "pointer" }}
               onClick={onDeleteLink}
             />

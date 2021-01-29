@@ -42,3 +42,10 @@
 .list {
   transition: 0.3s all;
 }
+.icon {
+  transition: 0.3s all;
+}
+
+.icon:hover {
+  color: #2e2e2e;
+}
