@@ -14,11 +14,10 @@ export const executeCode = async (code, lang, input) => {
         config
       );
       // resolve(res);
-      if (res) console.log(res);
-      if (res.data.status === "500") {
-        reject(res.data.message);
+      if (res.data.output === "") {
+        reject(res.data.misc);
       } else {
-        resolve(res.data.output);
+        resolve(res.data);
       }
     } catch (error) {
       console.log(error);

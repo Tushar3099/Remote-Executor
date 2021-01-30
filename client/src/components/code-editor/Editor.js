@@ -42,6 +42,7 @@ const CodeEditor = ({ theme }) => {
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
   const [error, setError] = useState("");
+  const [stat, setStats] = useState("");
   const [loading, setLoading] = useState(false);
   const [code, setCode] = useState("");
   const valueGetter = useRef();
@@ -86,14 +87,17 @@ const CodeEditor = ({ theme }) => {
     try {
       setLoading(true);
       const res = await executeCode(code, language, input);
-      setOutput(res);
+      setOutput((prev) => res.output);
+      setStats(res.misc);
+      setError("");
       console.log(res);
-      setLoading(false);
     } catch (error) {
       console.log(error);
-      setError(error);
-      setLoading(false);
+      setOutput("");
+      setStats("");
+      setError((prevVal) => error);
     }
+    setLoading(false);
   };
 
   const changeLanguage = (e) => {
@@ -128,7 +132,7 @@ const CodeEditor = ({ theme }) => {
                     color="#ffffff"
                     height={20}
                     width={50}
-                    timeout={3000} //3 secs
+                    // timeout={3000} //3 secs
                   />
                 ) : (
                   <>
@@ -166,7 +170,12 @@ const CodeEditor = ({ theme }) => {
                 className={styles.splitVer}
               >
                 <div className={styles.output}>
-                  <div className={styles.outputHead}>Output</div>
+                  <div className={styles.outputHead}>
+                    <span>Output</span>
+                    <span style={{ fontSize: "0.75em", fontWeight: 500 }}>
+                      {stat}
+                    </span>
+                  </div>
                   <OutputWindow error={error === "" ? false : true}>
                     {output ? console.log(output) : null}
                     <pre style={{ width: "100%" }}>
