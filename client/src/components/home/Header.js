@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import Footer from "../code-editor/Footer";
 import styles from "./styles/header.module.css";
 import { GoogleLogin } from "react-google-login";
 import { useDispatch, useSelector } from "react-redux";
+import Footer from "../code-editor/Footer";
 import { setUser } from "../../reducers/actions";
 import { FcGoogle } from "react-icons/fc";
 import Modal from "./Modal";

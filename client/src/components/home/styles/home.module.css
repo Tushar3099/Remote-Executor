@@ -1,20 +1,24 @@
 .container {
-  /* flex: 1 1; */
+  display: flex;
+  flex-direction: column;
   background-color: #363537;
   color: white;
-  /* height: 100%; */
-  flex-direction: column;
   overflow: auto;
 }
 
+.minContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
 .left {
-  /* flex: 2; */
+  flex: 4;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
   padding: 60px;
-  /* padding-right: 0; */
   box-sizing: border-box;
 }
 
@@ -28,7 +32,6 @@
 .left > h1 > span {
   font-size: 200px;
   animation: gradient 6s ease infinite;
-  /* padding: 60px; */
 }
 
 .left > div {
@@ -37,14 +40,15 @@
 }
 
 .right {
-  /* flex: 3; */
+  flex: 5;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  align-items: center;
-  justify-content: center;
-  /* box-sizing: border-box; */
+  /* align-items: center; */
+  /* justify-content: center; */
+  box-sizing: border-box;
   padding: 60px;
+  padding-left: 0;
 }
 
 .right > img {
@@ -91,17 +95,19 @@
   }
 }
 
-@media screen and (max-width: 1298px) {
-  .container {
+@media screen and (max-width: 1170px) {
+  .minContainer {
     flex-direction: column;
-    overflow: auto;
+    /* overflow: auto; */
   }
   .right {
+    width: 100%;
+    padding: 60px;
     align-items: center;
   }
-  .left {
+  /* .left {
     padding: 60px;
-  }
+  } */
 }
 
 @media screen and (max-width: 546px) {
