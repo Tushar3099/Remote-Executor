@@ -33,12 +33,12 @@ const TextInput = styled.textarea`
 `;
 
 const Input = ({ input, setInput, roomId, theme }) => {
-  let output = useSelector((state) => state.code.output);
-  let error = useSelector((state) => state.code.error);
+  // let output = useSelector((state) => state.code.output);
+  // let error = useSelector((state) => state.code.error);
 
-  useEffect(() => {
-    console.log(output);
-  }, [output]);
+  // useEffect(() => {
+  //   console.log(output);
+  // }, [output]);
   return (
     <Div className={styles.input_field}>
       <TextInput
