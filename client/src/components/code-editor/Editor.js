@@ -9,6 +9,7 @@ import styled from "styled-components";
 import styles from "./styles/editor.module.css";
 import "./styles/style.css";
 import { Play } from "react-feather";
+import Loader from "react-loader-spinner";
 import {
   getDefaultCode,
   setLanguageLocalStorage,
@@ -28,25 +29,25 @@ const OutputWindow = styled.div`
   padding: 20px;
   box-sizing: border-box;
   overflow: auto;
-  max-height : 60vh;
+  max-height: 60vh;
   flex: 1;
   color: ${(props) => (props.error ? "red" : "black")};
 `;
 
 const CodeEditor = ({ theme }) => {
-  const loading = useSelector((state) => state.code.isFetching);
   const [isEditorReady, setIsEditorReady] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [windowHeight, setWindowHeight] = useState(window.innerHeight);
   const [language, setLanguage] = useState("java");
   const [input, setInput] = useState("");
-  // const [output, setOutput] = useState("");
+  const [output, setOutput] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const [code, setCode] = useState("");
-  const dispatch = useDispatch();
   const valueGetter = useRef();
-  let output = useSelector((state) => state.code.output);
-
-  let error = useSelector((state) => state.code.error);
+  // let output = useSelector((state) => state.code.output);
+  // const loading = useSelector((state) => state.code.isFetching);
+  // let error = useSelector((state) => state.code.error);
 
   useEffect(() => {
     window.addEventListener("resize", updateWindowDimensions);
@@ -82,10 +83,17 @@ const CodeEditor = ({ theme }) => {
   };
 
   const SubmitCode = async () => {
-    dispatch(setLoadingTrue());
-    const res = await executeCode(code, language, input);
-    dispatch(res);
-    // getOutput();
+    try {
+      setLoading(true);
+      const res = await executeCode(code, language, input);
+      setOutput(res);
+      // console.log(res);
+      setLoading(false);
+    } catch (error) {
+      // console.log(error);
+      setError(error);
+      setLoading(false);
+    }
   };
 
   const changeLanguage = (e) => {
@@ -114,8 +122,20 @@ const CodeEditor = ({ theme }) => {
                 onClick={SubmitCode}
                 disabled={!isEditorReady}
               >
-                {loading ? "Loading.." : "Run Code"}
-                <Play style={{ paddingLeft: 10, fontSize: "1em" }} />
+                {loading ? (
+                  <Loader
+                    type="ThreeDots"
+                    color="#ffffff"
+                    height={20}
+                    width={50}
+                    timeout={3000} //3 secs
+                  />
+                ) : (
+                  <>
+                    <span>Run Code</span>
+                    <Play style={{ paddingLeft: 10, fontSize: "1em" }} />
+                  </>
+                )}
               </div>
             </div>
             {/* <Editor
