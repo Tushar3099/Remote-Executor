@@ -4,6 +4,7 @@ import Header from "./Header";
 import Terminal from "./Terminal";
 import { motion } from "framer-motion";
 import Typist from "react-typist";
+import BottomFooter from "./BottomFooter";
 
 const Home = () => {
   return (
@@ -40,6 +41,7 @@ const Home = () => {
           /> */}
           <Terminal />
         </div>
+        <BottomFooter />
       </div>
     </>
   );
