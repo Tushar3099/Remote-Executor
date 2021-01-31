@@ -41,6 +41,8 @@
 }
 .list {
   transition: 0.3s all;
+  display: flex;
+  padding: 10px;
 }
 .icon {
   transition: 0.3s all;
@@ -48,4 +50,11 @@
 
 .icon:hover {
   color: #2e2e2e;
+}
+
+@media screen and(max-width: 727px) {
+  .rowDate {
+    display: flex;
+    flex-direction: column;
+  }
 }
