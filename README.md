@@ -2,6 +2,8 @@
 
 # CODEX ( Remote Code Executor)
 
+### Available at:  https://codex-rce.netlify.app/
+
 ## Brief Description
 As the name suggests, it is a **Docker-based sandbox environment** to run a code snippet. It creates a new docker based container for each submitted code, run it in the isolated container, and return the output. It supports major programming languages C, C++,  python, java, javascript and can be extended to other language support too.
 It can also be used as an **Interview platform** where interviewer can generate unique link or code. A user can enter the interview using that uniquely generated link or code. After entering the interview with a particular link, the screen will be shared in **realtime**. It means , changes in one screen will be reflected to every user's screen in that particular interview. They can also do **video call** throughout the interview.
@@ -63,9 +65,12 @@ It can also be used as an **Interview platform** where interviewer can generate 
 * Redux (State Management)
 
 
-## Concept Used:
+
 
 ## Thought Behind the Project:
+Every person who is looking for a software engineering role has used some kind of online ide like codechef ide,  gfg ide etc. Ever wondered how these run user code ?
+So we tried to build one such code executor with a dedicated server which can provide high availability and secure environment.<br/>
+Also, many online code editors do not have interview and collaboration feature along with video chat. So we developed this platform which can be used for both code execution and interview purposes.
 
 ## Setup steps:
 
