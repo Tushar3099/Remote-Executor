@@ -2,8 +2,8 @@
 
 # CODEX ( Remote Code Executor)
 
-## Description
-As the name suggests, it is a **Docker-based sandbox environment** to run a code snippet. It creates a new docker based container for each submitted code, run it in the isolated container, and return the output. It supports major programming languages C, C++,  python, java, javascript and can be extended to other language support too.<br/>
+## Brief Description
+As the name suggests, it is a **Docker-based sandbox environment** to run a code snippet. It creates a new docker based container for each submitted code, run it in the isolated container, and return the output. It supports major programming languages C, C++,  python, java, javascript and can be extended to other language support too.
 It can also be used as an **Interview platform** where interviewer can generate unique link or code. A user can enter the interview using that uniquely generated link or code. After entering the interview with a particular link, the screen will be shared in **realtime**. It means , changes in one screen will be reflected to every user's screen in that particular interview. They can also do **video call** throughout the interview.
 
 
@@ -58,6 +58,7 @@ It can also be used as an **Interview platform** where interviewer can generate 
 * Docker (Containerisation)
 * Socket io (Realtime)
 * Node.js & Express (Backend)
+* Mongodb (Database)
 * Reactjs (Frontend)
 * Redux (State Management)
 
@@ -78,7 +79,7 @@ git clone <repo-url>
 
 
 
-
+#### Run in _dockerized_ mode
 ```shell
 # Go to server folder
 cd rce-server
@@ -95,6 +96,20 @@ docker-compose up server
 This will build the required docker image and run the server in a docker container which will be listening at http://localhost:3000.
 
 #### Run in _development_ mode
+Build executor image
+```shell
+# Go to server folder
+cd rce-server
+
+# Go to executor folder
+cd executor
+
+# Build image
+docker build -it executor:1.0 .
+
+# Back to root server directory
+cd ..
+```
 
 Install all package dependencies (one time operation)
 
