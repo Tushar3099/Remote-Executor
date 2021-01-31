@@ -47,21 +47,96 @@ It can also be used as an **Interview platform** where interviewer can generate 
    1. ***End Interview***: Interviewer can end interview by clicking on "End Meet" button. Link of interview also gets deleted.
    2. ***Invite***: Interviewer can add email ids of other user to invite them for interview. An email of invitation with unique code of interview will be sent to them.
    3. ***Realtime***: Any changes in programming language, code, input , output done on one screen will be reflected to all screens in that particular interview.
-   4. ***Video-call***:  A draggable video-call box displays the video call
+   4. ***Video-call***:  A draggable video-call box displays the video stream of users in that interview. User can minimise and  maximise video-call box size and also mute the user.
 ![alt text](https://user-images.githubusercontent.com/43985601/99189358-d6561a00-2786-11eb-8657-9f38f9139324.jpg "Fitness screens")
-![alt text](https://user-images.githubusercontent.com/43985601/99190032-487c2e00-278a-11eb-9594-b94bdf88f55c.jpg "Fitness Sub Screens")
+
 
 
 ## Tech Stack/Technologies Used
-* React Native
-* Node.js
-* Google Firebase
-* MongoDb
+* Docker (Containerisation)
+* Socket io (Realtime)
+* Node.js & Express (Backend)
+* Bash Scripting
+* Reactjs (Frontend)
+* Redux (State Management)
 
 
-## Future scopes:
-* Mood detection
-* Add chat between specialists viz. therapists, psychiatrists, social workers, and users.
-* Add specialists module
-* Add video calling functionality.
-* Add a booking appointment through the app and send a report of your profile along with your appointment request.
+## Concept Used:
+
+## Thought Behind the Project:
+
+## Setup steps:
+
+#### Get Started
+```shell
+# Clone repo
+git clone <repo-url>
+```
+
+> ## Server
+
+
+
+
+```shell
+# Go to server folder
+cd rce-server
+
+# build docker image
+docker-compose build
+
+# create volume
+docker volume create my_vol
+
+# run server in development mode
+docker-compose up server
+```
+This will build the required docker image and run the server in a docker container which will be listening at http://localhost:3000.
+
+#### Run in _development_ mode
+
+Install all package dependencies (one time operation)
+
+```shell
+npm install
+```
+
+Run the application in development mode at http://localhost:3000. Should not be used in production
+
+```shell
+npm run dev
+```
+
+#### Run in _production_ mode:
+
+Compiles the application and starts it in production production mode.
+
+```shell
+npm run compile
+npm start
+```
+
+> ## Client
+
+
+```shell
+# Go to client folder
+cd client
+```
+
+#### Run in _development_ mode
+
+Install all package dependencies (one time operation)
+
+```shell
+npm install
+```
+
+Run the application in development mode at http://localhost:8000. 
+```shell
+npm start
+```
+
+
+
+
