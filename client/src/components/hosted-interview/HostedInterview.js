@@ -33,7 +33,7 @@ const HostedInterview = () => {
           <ul>
             <li>
               <div className={styles.rowDate}>
-                <span className={styles.title}>Meeting Codes</span>
+                <span className={styles.title}>Hosted Interview(s)</span>
               </div>
             </li>
 
