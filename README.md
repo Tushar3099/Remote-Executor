@@ -58,7 +58,6 @@ It can also be used as an **Interview platform** where interviewer can generate 
 * Docker (Containerisation)
 * Socket io (Realtime)
 * Node.js & Express (Backend)
-* Bash Scripting
 * Reactjs (Frontend)
 * Redux (State Management)
 
