@@ -52,8 +52,12 @@
   color: #2e2e2e;
 }
 
-@media screen and(max-width: 727px) {
-  .rowDate {
+@media screen and (max-width: 727px) {
+  .title_li {
+    display: none;
+  }
+
+  .list {
     display: flex;
     flex-direction: column;
   }
