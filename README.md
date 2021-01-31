@@ -19,7 +19,7 @@ It can also be used as an **Interview platform** where interviewer can generate 
     5. ***Enter an Interview***: By clicking on "Enter Interview " button, a modal will open where user can enter valid code of the interview to get redirected to corresponding shared-interview screen.
     6. ***Left drawer***: When user is logged in, a hamburger icon appears on top-left corner. By clicking on hamburger, a sliding drawer appears from left consisting of two elements:  (a) Home   (b) Hosted Interviews
     
-    ![alt text](https://user-images.githubusercontent.com/43985601/99189365-da823780-2786-11eb-9f2a-1e07f1988e96.jpg "Tracks to refresh your mood from Spotify")
+    ![alt text](https://res.cloudinary.com/sh24sh25/image/upload/v1612105136/rce/Screenshot_from_2021-01-31_20-26-00_ea2x3c.png )
     
 
 2. **IDE Screen**:
@@ -30,6 +30,8 @@ It can also be used as an **Interview platform** where interviewer can generate 
     5.  ***Run Code***: By clicking on "Run Code" button, the code, input and language is sent to server for execution.
     6. ***Output***: Output or error(if any) with time and memory usage gets displayed in output box .
 
+![alt text](https://res.cloudinary.com/sh24sh25/image/upload/v1612105136/rce/Screenshot_from_2021-01-31_20-26-41_nuo7yv.png) 
+
 3. **Hosted Interviews Screen**:
     1. ***Code***: All generated unique codes of logged in user get displayed .
     2. ***Timestamp***: Timestamp of creation of respective code.
@@ -38,7 +40,7 @@ It can also be used as an **Interview platform** where interviewer can generate 
 	    2. ****Copy****: Copies the code to clipboard.
 	    3. ****Invite****: User can add email ids of other user to invite them for interview. An email of invitation with unique code of interview will be sent to them.
 	    4. ****Delete****: User can delete the link of interview.
-    ![alt text](https://user-images.githubusercontent.com/43985601/99190598-6a2ae480-278d-11eb-8cca-fb8cb75d2450.jpg "Professional help")
+    ![alt text](https://res.cloudinary.com/sh24sh25/image/upload/v1612105136/rce/Screenshot_from_2021-01-31_20-26-10_j4rqky.png)
 
 4. **Interview Screen**: 
 
@@ -48,7 +50,7 @@ It can also be used as an **Interview platform** where interviewer can generate 
    2. ***Invite***: Interviewer can add email ids of other user to invite them for interview. An email of invitation with unique code of interview will be sent to them.
    3. ***Realtime***: Any changes in programming language, code, input , output done on one screen will be reflected to all screens in that particular interview.
    4. ***Video-call***:  A draggable video-call box displays the video stream of users in that interview. User can minimise and  maximise video-call box size and also mute the user.
-![alt text](https://user-images.githubusercontent.com/43985601/99189358-d6561a00-2786-11eb-8657-9f38f9139324.jpg "Fitness screens")
+![alt text](https://res.cloudinary.com/sh24sh25/image/upload/v1612105136/rce/Screenshot_from_2021-01-31_20-27-45_otihpo.png)
 
 
 
