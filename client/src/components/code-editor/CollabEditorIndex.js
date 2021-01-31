@@ -10,10 +10,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { isLoggedIn } from '../../utils/isLoggedIn';
 import HeaderCollab from './HeaderCollab';
 import { checkAccess } from '../../actions/interview-link';
-import io from 'socket.io-client';
-const ENDPOINT = 'http://localhost:3000';
+// import io from 'socket.io-client';
+// const ENDPOINT = 'http://localhost:3000';
 
-const socket = io(ENDPOINT);
+// const socket = io(ENDPOINT);
 
 const CollabEditorIndex = props => {
   const [theme, toggleTheme, componentMounted] = useDarkMode();
@@ -31,37 +31,37 @@ const CollabEditorIndex = props => {
     }
   }, []);
 
-  useEffect(() => {
-    socket.on('welcome', data => {
-      console.log('welcome', data);
-    });
-    socket.on('end', data => {
-      console.log(data, 'end');
-    });
-    socket.on('setUsersInInterview', data => {
-      console.log('Users', data);
-    });
-    return () => {
-      socket.emit('endInterview');
+  // useEffect(() => {
+  //   socket.on('welcome', data => {
+  //     console.log('welcome', data);
+  //   });
+  //   socket.on('end', data => {
+  //     console.log(data, 'end');
+  //   });
+  //   socket.on('setUsersInInterview', data => {
+  //     console.log('Users', data);
+  //   });
+  //   return () => {
+  //     socket.emit('endInterview');
 
-      socket.off();
-    };
-  }, []);
+  //     socket.off();
+  //   };
+  // }, []);
 
-  useEffect(() => {
-    socket.emit('getUsersInInterview', props.match.params.id);
-  });
+  // useEffect(() => {
+  //   socket.emit('getUsersInInterview', props.match.params.id);
+  // });
 
-  useEffect(() => {
-    socket.emit('joinInterview', {
-      email: user.email,
-      roomId: props.match.params.id
-    });
+  // useEffect(() => {
+  //   socket.emit('joinInterview', {
+  //     email: user.email,
+  //     roomId: props.match.params.id
+  //   });
 
-    socket.on('log', data => {
-      console.log('socketData', data);
-    });
-  }, [props.match.params.id, user]);
+  //   socket.on('log', data => {
+  //     console.log('socketData', data);
+  //   });
+  // }, [props.match.params.id, user]);
 
   const checkAccessForLink = async () => {
     const access = await checkAccess(props.match.params.id);
@@ -81,7 +81,7 @@ const CollabEditorIndex = props => {
         link={props.match.params.id}
       />
       <Footer />
-      <Editor theme={theme} roomId={props.match.params.id} socket={socket} />
+      <Editor theme={theme} roomId={props.match.params.id} />
     </ThemeProvider>
   );
 };

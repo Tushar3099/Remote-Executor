@@ -12,50 +12,49 @@ const VOL_NAME = SOURCE_DIR;
 
 class CodeService {
   async execute(code, input, lang, id) {
-    //console.log('code', code);
     try {
       !input ? (input = "") : null;
-      
+
       // validating code
       const { isValid, message } = await ValidationService.execute(
         code,
         input,
         lang,
         id
-        );
-        if (!isValid) {
-          throw {
-            message,
-          };
-        }
-        
-        //writing the code,input  files
-        const { file, inputFile } = await this.writeFile(code, lang, input, id);
-        
-        //write command
-        const { runCode, runContainer } = await this.writeCommand(
-          lang,
-          file,
-          inputFile,
-          id,
-          code
-          );
-          
-          //executing the file
-          const OUTPUT = await this.execChild(
-            runCode,
-            runContainer,
-            id,
-            file,
-            inputFile,
-            lang,
-            code
-            );
-            
-            console.log(SOURCE_DIR);
-      if (OUTPUT) {
-        console.log("output", OUTPUT.toString());
-        return OUTPUT.toString();
+      );
+      if (!isValid) {
+        throw {
+          message,
+        };
+      }
+
+      //writing the code,input  files
+      const { file, inputFile } = await this.writeFile(code, lang, input, id);
+
+      //write command
+      const { runCode, runContainer } = await this.writeCommand(
+        lang,
+        file,
+        inputFile,
+        id,
+        code
+      );
+
+      //executing the file
+      const { stdout, stderr } = await this.execChild(
+        runCode,
+        runContainer,
+        id,
+        file,
+        inputFile,
+        lang,
+        code
+      );
+
+      console.log(SOURCE_DIR);
+      if (stderr || stdout) {
+        // console.log("output", stderr, stdout);
+        return { stderr: stderr.toString(), stdout: stdout.toString() };
       }
     } catch (error) {
       throw error;
@@ -107,26 +106,26 @@ class CodeService {
     let command = "";
     switch (lang) {
       case "javascript": {
-        command = `cd "${TARGET_DIR}" && node ${file} < ${input}`;
+        command = `cd "${TARGET_DIR}" && /usr/bin/time -f 'TIME=%es   MEM=%ZKb' node ${file} < ${input}`;
         break;
       }
       case "cpp": {
-        command = `cd "${TARGET_DIR}" && g++ -o ${id} ${file} && ./${id} < ${input}`;
+        command = `cd "${TARGET_DIR}" && g++ -o ${id} ${file} && /usr/bin/time -f 'TIME=%es   MEM=%ZKb' ./${id} < ${input}`;
         break;
       }
       case "python": {
-        command = `cd "${TARGET_DIR}" && python ${file} < ${input}`;
+        command = `cd "${TARGET_DIR}" && /usr/bin/time -f 'TIME=%es   MEM=%ZKb' python ${file} < ${input}`;
         break;
       }
       case "java": {
         let className = await this.extractJavaClassName(code);
         className = className.split(/\s/).join("");
         console.log("class ", className);
-        command = `cd "${TARGET_DIR}" && javac ${file} && java ${className} < ${input}`;
+        command = `cd "${TARGET_DIR}" && javac ${file} && /usr/bin/time -f 'TIME=%es   MEM=%ZKb' java ${className} < ${input}`;
         break;
       }
       case "c": {
-        command = `cd "${TARGET_DIR}" && gcc -o ${id} ${file} && ./${id} < ${input}`;
+        command = `cd "${TARGET_DIR}" && gcc -o ${id} ${file} && /usr/bin/time -f 'TIME=%es   MEM=%ZKb' ./${id} < ${input}`;
         break;
       }
       default: {
@@ -154,28 +153,39 @@ class CodeService {
         exec(`${runCode}`, async (error, stdout, stderr) => {
           await this.endContainer(id);
           await this.deleteFiles(file, inputFile, lang, id, code);
-          if (stderr) {
-            reject({ message: stderr });
-          } else {
-            resolve(stdout);
-          }
+          // console.log("[ ERROR ] ", error);
+          // console.log("[ STD_ERROR ] ", stderr);
+          // console.log("[ STD_OUT ] ", stdout);
+          // if (error) {
+          //   // console.log(error);
+          // }
+          const response = {
+            stderr,
+            stdout,
+          };
+          resolve(response);
+          // if (stderr) {
+          //   reject({ message: stderr });
+          // } else {
+          //   resolve(stdout);
+          // }
         });
       });
     });
   }
 
   async deleteFiles(fileName, inputName, lang, id, code) {
-    fs.unlinkSync(path.join(SOURCE_DIR, fileName), (err) => {
+    fs.unlink(path.join(SOURCE_DIR, fileName), (err) => {
       if (err) throw { message: err };
     });
     if (inputName) {
-      fs.unlinkSync(path.join(SOURCE_DIR, inputName), (err) => {
+      fs.unlink(path.join(SOURCE_DIR, inputName), (err) => {
         if (err) throw { message: err };
       });
     }
     if (lang == "cpp" || lang == "c") {
       if (fs.existsSync(path.join(SOURCE_DIR, id)))
-        fs.unlinkSync(path.join(SOURCE_DIR, id), (err) => {
+        fs.unlink(path.join(SOURCE_DIR, id), (err) => {
           if (err) throw err;
         });
     }
@@ -184,7 +194,7 @@ class CodeService {
       className = className.split(/\s/).join("");
       console.log("delete", className);
       if (fs.existsSync(path.join(SOURCE_DIR, `${className}.class`)))
-        fs.unlinkSync(path.join(SOURCE_DIR, `${className}.class`), (err) => {
+        fs.unlink(path.join(SOURCE_DIR, `${className}.class`), (err) => {
           if (err) throw err;
         });
     }

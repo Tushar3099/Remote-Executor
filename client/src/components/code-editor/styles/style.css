@@ -64,6 +64,7 @@
   left: 0;
   border-radius: 10px 10px 0px 0px;
   background-color: rgb(22, 22, 22);
+  cursor: grabbing;
 }
 
 .videoBox {
@@ -94,6 +95,19 @@ video::-webkit-media-controls-timeline {
 
 .hide {
   visibility: hidden !important;
+}
+
+.name {
+  margin: 10px;
+  font-weight: 500;
+}
+
+pre {
+  white-space: pre-wrap; /* css-3 */
+  white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+  white-space: -pre-wrap; /* Opera 4-6 */
+  white-space: -o-pre-wrap; /* Opera 7 */
+  word-wrap: break-word; /* Internet Explorer 5.5+ */
 }
 
 @media only screen and (max-width: 800px) {

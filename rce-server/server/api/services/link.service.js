@@ -1,18 +1,21 @@
-import mongoose from 'mongoose';
-import crypto from 'crypto';
-const Link = require('../../models/link');
-const User = require('../../models/user');
+import mongoose from "mongoose";
+import crypto from "crypto";
+import nodemailer from "nodemailer";
+const Link = require("../../models/link");
+const User = require("../../models/user");
 const BASE_URI = process.env.BASE_URI;
+const senderEmail = process.env.SENDER_EMAIL;
+const senderPassword = process.env.SENDER_PASSWORD;
 
 class LinkService {
   async generate(user) {
     try {
-      const uid = crypto.randomBytes(16).toString('hex');
+      const uid = crypto.randomBytes(16).toString("hex");
       const link = `${uid}`;
 
       const generatedLink = await Link.create({
         link,
-        interviewer: user._id
+        interviewer: user._id,
       });
 
       if (generatedLink) return generatedLink.link;
@@ -30,12 +33,12 @@ class LinkService {
           if (deleted.ok) return true;
         } else {
           throw {
-            message: 'Only interviewer can end the interview!!'
+            message: "Only interviewer can end the interview!!",
           };
         }
       } else {
         throw {
-          message: 'Link not found!'
+          message: "Link not found!",
         };
       }
     } catch (error) {
@@ -54,16 +57,24 @@ class LinkService {
             { new: true }
           );
           if (data.ok) {
-            return true;
+            const sentMail = await this.sendMail(link, email, user);
+            console.log(sentMail);
+            if (sentMail) {
+              return true;
+            } else {
+              throw {
+                message: "Unable to send email at moment. Try again!!",
+              };
+            }
           }
         } else {
           throw {
-            message: 'Only interviewer can add emails!!'
+            message: "Only interviewer can add emails!!",
           };
         }
       } else {
         throw {
-          message: 'Link not found!'
+          message: "Link not found!",
         };
       }
     } catch (error) {
@@ -86,12 +97,12 @@ class LinkService {
           }
         } else {
           throw {
-            message: 'Only interviewer can remove emails!!'
+            message: "Only interviewer can remove emails!!",
           };
         }
       } else {
         throw {
-          message: 'Link not found!'
+          message: "Link not found!",
         };
       }
     } catch (error) {
@@ -111,7 +122,7 @@ class LinkService {
         return isLink.email;
       } else {
         throw {
-          message: 'Link not found!'
+          message: "Link not found!",
         };
       }
     } catch (error) {
@@ -133,11 +144,38 @@ class LinkService {
         return false;
       } else {
         throw {
-          message: 'Link not found'
+          message: "Link not found",
         };
       }
     } catch (error) {
       throw error;
+    }
+  }
+
+  async sendMail(code, email, user) {
+    // console.log("hello mail");
+    // return "Done";
+    var transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: senderEmail,
+        pass: senderPassword,
+      },
+    });
+    var mailOptions = {
+      from: senderEmail,
+      to: email,
+      subject: "Invitation for interview",
+      // text: "",
+      html: `<body>Hey,</body><body>You are invited for an interview with <b>${user.name}</b>. You are requested to SignIn through this email
+        only for this interview.</body> <br><body><b>Your code is:</b><br>${code}</body>
+        <br><br><body>All the best,<br>Team Codex</body>`,
+    };
+
+    const isSent = await transporter.sendMail(mailOptions);
+    if (isSent) {
+      console.log(isSent);
+      return true;
     }
   }
 }
